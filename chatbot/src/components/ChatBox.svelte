@@ -7,11 +7,12 @@
     import { conversations, activeThreadId } from '../stores.js';
 
     let messages = [];
-    let currentThreadId;
+    let currentThreadId = '';
+    let isInterrupted = false;
 
     // Suscribirse a los cambios de la conversación activa
     activeThreadId.subscribe(id => {
-        currentThreadId = id;
+        currentThreadId = id || '';
         conversations.subscribe(conv => {
             if (currentThreadId && conv[currentThreadId]) {
                 messages = conv[currentThreadId].messages;  // Cargar los mensajes de la conversación activa
@@ -25,8 +26,6 @@
     const handleSendMessage = async (message) => {
         try {
             const response = await sendMessage(message.detail);
-            
-            let newThreadId = response['thread_id'] || currentThreadId;
 
             // Actualizar o crear una nueva conversación en el store
             conversations.update(conv => {
@@ -51,9 +50,15 @@
                 // Agregar los mensajes del usuario y la respuesta del bot
                 conv[threadIdToUpdate].messages = [
                     ...conv[threadIdToUpdate].messages,
-                    { content: message.detail['query'], sender: 'user' },
+                    { content: message.detail['query'] || message.detail['user_answer'], sender: 'user' },
                     { content: response['response'], sender: 'bot' }
                 ];
+
+                if (response.is_interrupted) {
+                    isInterrupted = true;  // Marcar la conversación como interrumpida
+                } else {
+                    isInterrupted = false;  // Reiniciar si no hay interrupción
+                }
 
                 return conv;
             });
@@ -72,7 +77,7 @@
     </div>
 
     <!-- Input para escribir y enviar mensajes -->
-    <MessageInput on:sendMessage={handleSendMessage} />
+    <MessageInput on:sendMessage={handleSendMessage} {isInterrupted} threadId={currentThreadId} />
 </div>
 
 <style>

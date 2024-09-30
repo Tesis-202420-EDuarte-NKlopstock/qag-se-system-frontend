@@ -1,18 +1,31 @@
-<!-- Componente con el input de texto donde el usuario escribe y envía el mensaje -->
-
 <script>
     import { createEventDispatcher } from 'svelte';
 
     let newMessage = '';
     const dispatch = createEventDispatcher();
+    export let isInterrupted = false;  // Variable para saber si el flujo está interrumpido
+    export let threadId = '';
 
     const handleSend = () => {
         if (newMessage.trim()) {
-            let messageObject = {
-                "query": newMessage,
-                "thread_id": ""
-            };
-            console.log('Enviando mensaje:', messageObject);
+            let messageObject;
+
+            // Si la conversación está interrumpida, enviamos el mensaje como "user_answer"
+            if (isInterrupted) {
+                messageObject = {
+                    "query": "",
+                    "thread_id": threadId,
+                    "user_answer": newMessage
+                };
+            } else {
+                // Si no está interrumpida, enviamos el mensaje normal con "query"
+                messageObject = {
+                    "thread_id": threadId,
+                    "query": newMessage
+                };
+            }
+
+            // Emitir el mensaje al componente padre (ChatBox)
             dispatch('sendMessage', messageObject);
             newMessage = ''; // Limpiar el input después de enviar
         }
