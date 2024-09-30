@@ -4,7 +4,7 @@
     let newMessage = '';
     const dispatch = createEventDispatcher();
     export let isInterrupted = false;  // Variable para saber si el flujo está interrumpido
-    export let threadId = '';
+    export let threadId = '';  // Se recibirá desde ChatBox el threadId actual
 
     const handleSend = () => {
         if (newMessage.trim()) {
@@ -14,13 +14,13 @@
             if (isInterrupted) {
                 messageObject = {
                     "query": "",
-                    "thread_id": threadId,
+                    "thread_id": threadId.startsWith('new') ? "" : threadId,  // Enviar "" si es una nueva conversación
                     "user_answer": newMessage
                 };
             } else {
                 // Si no está interrumpida, enviamos el mensaje normal con "query"
                 messageObject = {
-                    "thread_id": threadId,
+                    "thread_id": threadId.startsWith('new') ? "" : threadId,  // Enviar "" si es una nueva conversación
                     "query": newMessage
                 };
             }

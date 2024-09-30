@@ -33,6 +33,10 @@
         // Solo crear una nueva conversación si la actual no está vacía
         if (!isCurrentConversationEmpty) {
             let newThreadId = 'new-' + Date.now();  // Crear un ID temporal único para la nueva conversación
+            conversations.update(conv => {
+                conv[newThreadId] = { messages: [] };  // Inicializar la conversación vacía
+                return conv;
+            });
             activeThreadId.set(newThreadId);  // Establecer la nueva conversación como la activa
         }
     };

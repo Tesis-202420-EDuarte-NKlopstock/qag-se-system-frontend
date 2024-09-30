@@ -1,5 +1,3 @@
-<!-- Componente principal donde se mostrarán los mensajes -->
-
 <script>
     import MessageBubble from './MessageBubble.svelte';
     import MessageInput from './MessageInput.svelte';
@@ -33,13 +31,11 @@
 
                 // Si el thread_id no existe, obtenemos uno del backend
                 if (!currentThreadId || currentThreadId.startsWith('new')) {
-                    threadIdToUpdate = response.thread_id;
-                    activeThreadId.set(threadIdToUpdate);
-                }
-
-                // Si la conversación era temporal, eliminamos la conversación vacía temporal
-                if (currentThreadId && currentThreadId.startsWith('new')) {
-                    delete conv[currentThreadId];
+                    const realThreadId = response.thread_id;  // thread_id devuelto por el backend
+                    conv[realThreadId] = conv[currentThreadId];  // Reemplazamos la conversación temporal con el real
+                    delete conv[currentThreadId];  // Eliminamos la conversación temporal
+                    threadIdToUpdate = realThreadId;  // Actualizamos el id de la conversación actual
+                    activeThreadId.set(realThreadId);  // Actualizamos la conversación activa
                 }
 
                 // Si no existe la conversación, inicializarla
