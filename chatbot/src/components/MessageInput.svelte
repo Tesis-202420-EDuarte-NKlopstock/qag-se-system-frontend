@@ -1,4 +1,5 @@
 <script>
+    import { onMount } from 'svelte';  // Importar el hook onMount
     import { createEventDispatcher } from 'svelte';
 
     let newMessage = '';
@@ -6,6 +7,7 @@
     export let isInterrupted = false;  // Variable para saber si el flujo está interrumpido
     export let threadId = '';  // Se recibirá desde ChatBox el threadId actual
 
+    // Función que se ejecuta al enviar el mensaje
     const handleSend = () => {
         if (newMessage.trim()) {
             let messageObject;
@@ -30,6 +32,12 @@
             newMessage = ''; // Limpiar el input después de enviar
         }
     };
+
+    // Enviar "Hola!" cuando el componente se carga
+    onMount(() => {
+        newMessage = 'Hola!';
+        handleSend();  // Llamar a handleSend para enviar el mensaje automáticamente
+    });
 </script>
 
 <div class="message-input">
@@ -41,22 +49,33 @@
     .message-input {
         display: flex;
         border-top: 1px solid #ccc;
-        padding: 10px;
+        padding: 15px; /* Aumenta el padding del contenedor */
+        background-color: white;
+        border-radius: 0 0 10px 10px;
     }
 
     input {
         flex-grow: 1;
-        padding: 10px;
+        padding: 18px; /* Aumenta el padding para hacer el input más alto */
         border: 1px solid #ccc;
-        border-radius: 5px;
+        border-radius: 20px;
+        font-size: 16px; /* Aumenta el tamaño del texto */
+        outline: none;
     }
 
     button {
         margin-left: 10px;
-        padding: 10px;
+        padding: 18px 30px; /* Aumenta el padding del botón */
         background-color: #007bff;
         color: white;
         border: none;
-        border-radius: 5px;
+        border-radius: 20px;
+        font-size: 16px; /* Aumenta el tamaño del texto del botón */
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+        background-color: #0056b3; /* Darker blue on hover */
     }
 </style>

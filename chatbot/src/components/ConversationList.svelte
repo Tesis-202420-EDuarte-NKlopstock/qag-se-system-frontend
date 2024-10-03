@@ -25,8 +25,20 @@
         checkIfCurrentConversationIsEmpty(); // Comprobar si la conversación actual está vacía
     });
 
-    const setActiveConversation = (id) => {
+    const setActiveConversation = async (id) => {
         activeThreadId.set(id);  // Cambia la conversación activa
+
+        // Asegúrate de que el estado del backend esté sincronizado
+        const response = await getConversationStateFromBackend(id);
+        
+        conversations.update(conv => {
+            if (!conv[id]) {
+                conv[id] = { messages: [] };  // Si no existe la conversación, inicializarla
+            }
+
+            conv[id].messages = response.messages || [];  // Actualizar los mensajes del estado del backend
+            return conv;
+        });
     };
 
     const createNewConversation = () => {
