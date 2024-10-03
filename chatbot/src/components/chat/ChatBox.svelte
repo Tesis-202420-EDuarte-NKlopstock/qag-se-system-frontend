@@ -1,8 +1,8 @@
 <script>
-    import MessageBubble from './MessageBubble.svelte';
-    import MessageInput from './MessageInput.svelte';
-    import { sendMessage } from '../services/chatService.js';
-    import { conversations, activeThreadId } from '../stores.js';
+    import MessageBubble from '../chat/MessageBubble.svelte';
+    import MessageInput from '../chat/MessageInput.svelte';
+    import { sendMessage } from '../../services/chatService.js';
+    import { conversations, activeThreadId } from '../../stores.js';
 
     let messages = [];
     let currentThreadId = '';

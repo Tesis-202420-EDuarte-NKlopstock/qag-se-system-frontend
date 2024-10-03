@@ -1,5 +1,5 @@
 <script>
-    import { conversations, activeThreadId } from '../stores.js';
+    import { conversations, activeThreadId } from '/src/stores.js';
 
     let convs;
     let currentThreadId;

@@ -1,16 +1,50 @@
 <script>
-    import ChatBox from './components/ChatBox.svelte';
-    import ConversationList from './components/ConversationList.svelte';
-</script>
-
-<div class="app">
-    <!-- <ConversationList /> -->
-    <ChatBox />
-</div>
-
-<style>
-    .app {
-        display: flex;
-        height: 100vh;
+    import { Router, Route, navigate, link } from "svelte-routing";
+    import ChatPage from "./pages/ChatPage.svelte";
+    import TowerGame from "./components/tower_game/TowerGame.svelte";
+  
+    // Variable para manejar la visibilidad de la pantalla de bienvenida
+    let showWelcomeScreen = true;
+  
+    // Función para manejar la navegación programáticamente
+    function goToGame() {
+      navigate("/game");
+      showWelcomeScreen = false;  // Oculta la pantalla de bienvenida
     }
-</style>
+  
+    function goToChatbot() {
+      navigate("/chatbot");
+      showWelcomeScreen = false;  // Oculta la pantalla de bienvenida
+    }
+  </script>
+  
+  <!-- Mostrar pantalla de bienvenida solo si `showWelcomeScreen` es true -->
+  {#if showWelcomeScreen}
+    <div class="welcome-screen">
+      <h1>Bienvenido</h1>
+      <p>Elige una opción:</p>
+  
+      <!-- Manejo manual de la navegación -->
+      <button on:click={goToGame}>Ir al juego de las torres</button>
+      <button on:click={goToChatbot}>Ir al chatbot</button>
+    </div>
+  {/if}
+  
+  <!-- Router para manejar las rutas -->
+  <Router>
+    <Route path="/game" component={TowerGame} />
+    <Route path="/chatbot" component={ChatPage} />
+  </Router>
+  
+  <style>
+    .welcome-screen {
+      text-align: center;
+      margin-top: 50px;
+    }
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 18px;
+    }
+  </style>
+  
