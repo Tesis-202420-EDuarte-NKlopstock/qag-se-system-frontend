@@ -9,6 +9,8 @@
 
     // Función que se ejecuta al enviar el mensaje
     const handleSend = () => {
+        if (newMessage === '') return;
+        
         if (newMessage.trim()) {
             let messageObject;
 

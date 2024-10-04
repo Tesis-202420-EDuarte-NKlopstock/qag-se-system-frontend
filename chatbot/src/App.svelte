@@ -8,7 +8,7 @@
   
     // Función para manejar la navegación programáticamente
     function goToGame() {
-      navigate("/game");
+      navigate("/towergame");
       showWelcomeScreen = false;  // Oculta la pantalla de bienvenida
     }
   
@@ -32,7 +32,7 @@
   
   <!-- Router para manejar las rutas -->
   <Router>
-    <Route path="/game" component={TowerGame} />
+    <Route path="/towergame" component={TowerGame} />
     <Route path="/chatbot" component={ChatPage} />
   </Router>
   

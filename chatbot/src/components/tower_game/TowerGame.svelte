@@ -1,134 +1,172 @@
 <script>
-    import { onDestroy } from "svelte";
+    import { onDestroy, onMount } from "svelte";
+    import { evaluateAnswer, getQuestions, sendMessage } from '../../services/chatService.js';
     import Block from "./Block.svelte";
-  
-    let blocks = [];
-    let yPositions = {};
+    import { trusted } from "svelte/internal";
+
+    let blocks = []; // Arreglo para almacenar los bloques
+    let blockIdCounter = 0;  // Contador para generar ids únicos
+    let yPositions = {}; // Objetos para llevar el estado de la posición Y de los bloques
     let fixedBlocks = {};  // Objetos para llevar el estado de los bloques fijados
     let xPosition = 150; // Posición horizontal por defecto
-    let currentQuestionIndex = 0;
     let fixedBlockCount = 0;  // Contador de bloques fijados
     let highestFixedBlockY = 600;  // Altura inicial del bloque más alto fijado
     let sumTotalHeight = 0;  // Suma de la altura de todos los bloques fijados
     let gameOver = false;  // Estado del juego
-    
-    let questions = [
-      { question: "¿Cuál es la capital de Francia?", answer: "París" },
-      { question: "¿Cuánto es 2 + 2?", answer: "4" },
-      { question: "¿Qué es el agua en inglés?", answer: "water" }
-    ];
-  
-    let answer = "";  // Respuesta ingresada por el usuario
     let currentBlock = null;  // Bloque que está siendo respondido
-  
+    let totalFixedBlocks = 0;  // Total de bloques fijados
+
+    let questions = []; // Arreglo para almacenar las preguntas
+    let answer = "";  // Respuesta ingresada por el usuario
+
+    onMount(async () => {
+      questions = await getQuestions(); // Inicializar preguntas
+    });
+
     // Función para agregar un nuevo bloque
+
     function dropBlock() {
-      if (currentQuestionIndex < questions.length && !gameOver) {
-        const newBlock = { ...questions[currentQuestionIndex] };
-        blocks.push(newBlock);
-        yPositions[newBlock.question] = 0;  // Inicializa la posición Y del bloque
-        fixedBlocks[newBlock.question] = false;  // Inicializa el estado de "no fijado"
-  
-        // Si no hay un bloque actual, el primer bloque que se añade se convierte en currentBlock
-        if (currentBlock === null) {
-          currentBlock = newBlock;
+        if (questions.length > 0 && !gameOver) {
+            // Selecciona una pregunta aleatoria
+            const randomIndex = Math.floor(Math.random() * questions.length);
+            const randomQuestion = questions[randomIndex];
+
+            // Crear un nuevo bloque con un id único
+            const newBlock = { id: blockIdCounter++, question: randomQuestion, answer: "" }; // id es para generar preguntas para siempre jiji
+            blocks.push(newBlock);
+            yPositions[newBlock.id] = 0;  // Inicializa la posición Y del bloque
+            fixedBlocks[newBlock.id] = false;  // Inicializa el estado de "no fijado"
+            
+            // Si no hay un bloque activo, el primer bloque creado se convierte en el currentBlock
+            if (currentBlock === null) {
+                currentBlock = newBlock;
+            }
+
+            // Elimina la pregunta seleccionada del arreglo de preguntas para que no se repita
+            // questions.splice(randomIndex, 1);
+            console.log("Nuevo bloque añadido:", newBlock);
+        } else {
+            console.log("No hay más preguntas o el juego ha terminado.");
         }
-  
-        currentQuestionIndex++;
-        console.log("Nuevo bloque añadido:", newBlock);
-      } else {
-        console.log("No hay más preguntas.");
-      }
     }
-  
+
     // Verifica si algún bloque ha superado la altura del bloque más alto fijado
     function checkGameOver() {
-      blocks.forEach((block) => {
-        if (!fixedBlocks[block.question] && (yPositions[block.question] - 50) >= highestFixedBlockY) {
-          console.log("¡Fin del juego! Un bloque ha pasado la altura permitida.");
-          gameOver = true;
-          clearIntervals();  // Llama a la función que detiene todos los intervalos
-        }
-      });
+        blocks.forEach((block) => {
+            if (!fixedBlocks[block.id] && (yPositions[block.id] - 50) >= highestFixedBlockY) {
+                console.log("¡Fin del juego! Un bloque ha pasado la altura permitida.");
+                gameOver = true;
+                clearIntervals();  // Detiene los intervalos
+            }
+        });
     }
-  
+
     // Función para detener todos los intervalos
     function clearIntervals() {
-      clearInterval(interval);  // Detiene la caída de bloques
-      clearInterval(dropBlockInterval);  // Detiene la generación de nuevos bloques
+        clearInterval(interval);  // Detiene la caída de bloques
+        clearInterval(dropBlockInterval);  // Detiene la generación de nuevos bloques
     }
-  
+
     // Simula la caída de los bloques cada 200ms
     const interval = setInterval(() => {
         if (!gameOver) {
             blocks.forEach((block) => {
-            if (!fixedBlocks[block.question]) {  // Solo actualiza si el bloque no está fijado
-                yPositions[block.question] += 12;  // Incrementa la posición Y (caída)
-                
-                // Verifica si el bloque ha llegado al fondo del área de juego
-                if (yPositions[block.question] >= 548) {  // 600 es la altura del área de juego, 50 es la altura del bloque
-                    console.log(`El bloque ${block.question} ha llegado al fondo.`);
-                    clearIntervals();  // Detiene la caída de bloques y la generación de nuevos
-                    gameOver = true;  // Termina el juego
+                if (!fixedBlocks[block.id]) {  // Solo actualiza si el bloque no está fijado
+                    yPositions[block.id] += 12;  // Incrementa la posición Y (caída)
+
+                    // Verifica si el bloque ha llegado al fondo del área de juego
+                    if (yPositions[block.id] >= 548) {  // 600 es la altura del área de juego, 50 es la altura del bloque
+                        console.log(`El bloque ${block.id} ha llegado al fondo.`);
+                        clearIntervals();  // Detiene la caída de bloques y la generación de nuevos
+                        gameOver = true;  // Termina el juego
+                    }
+
+                    if (!fixedBlocks[block.id] && yPositions[block.id] >= (highestFixedBlockY - 30)) {
+                        console.log("¡Fin del juego! Un bloque ha pasado la altura permitida.");
+                        clearIntervals();  // Llama a la función que detiene todos los intervalos
+                        gameOver = true;
+                    }
                 }
-                
-                if (!fixedBlocks[block.question] && yPositions[block.question] >= (highestFixedBlockY - 30)) {
-                    console.log("¡Fin del juego! Un bloque ha pasado la altura permitida.");
-                    clearIntervals();  // Llama a la función que detiene todos los intervalos
-                    gameOver = true;
-                }
-            }
             });
             checkGameOver();  // Verifica si el juego debe terminar
         }
-        }, 200);
-  
-    // Empieza a soltar bloques cada 5 segundos
+    }, 800);  // Intervalo de caída
+
+    // Intervalo para soltar un nuevo bloque cada 3 segundos
     const dropBlockInterval = setInterval(() => {
-      if (!gameOver) {
-        dropBlock();
-      }
-    }, 3000);
-  
-    // Validar la respuesta ingresada
-    function checkAnswer() {
-      if (currentBlock && currentBlock.answer === answer) {
-        console.log("¡Respuesta correcta!", currentBlock.question);
-  
-        // Coloca el bloque en la parte inferior del área de juego y lo fija
-        yPositions[currentBlock.question] = 600 - (fixedBlockCount * 52) - 52;  // Ajusta la posición Y
-        fixedBlocks[currentBlock.question] = true;  // Marca este bloque como "fijado"
-        fixedBlockCount++;  // Incrementa el número de bloques fijados
-        sumTotalHeight += 52;  // Actualiza la altura total de los bloques fijados
-  
-        // Actualiza la altura del bloque más alto fijado
-        highestFixedBlockY = yPositions[currentBlock.question];
-  
-        // Actualiza currentBlock al siguiente bloque más reciente
-        const blockIndex = blocks.indexOf(currentBlock);
-        if (blockIndex + 1 < blocks.length) {
-          currentBlock = blocks[blockIndex + 1];  // El siguiente bloque en el orden de salida
-        } else {
-          currentBlock = null;  // No hay más bloques por responder
+        if (!gameOver) {
+            dropBlock();
         }
-  
-      } else {
-        console.log("Respuesta incorrecta", currentBlock ? currentBlock.question : "");
-  
-        // Termina el juego si la respuesta es incorrecta
-        clearIntervals();  // Detiene la caída de bloques y la generación de nuevos
-        gameOver = true;
-      }
-  
-      // Limpiar el campo de respuesta
-      answer = "";
+    }, 6000);
+
+    // Validar la respuesta ingresada
+    async function checkAnswer() {
+        if (answer === '') return;  
+
+        if (!currentBlock) {
+            console.log("No hay bloques para responder.");
+            return;
+        }
+
+        currentBlock.answer = answer;  // Actualiza la respuesta del bloque actual
+        let evaluation = await evaluateAnswer(currentBlock);
+
+        // evaluation['evaluation'] = true; // Simula una respuesta correcta
+        if (evaluation['evaluation'] === true) {
+            console.log("¡Respuesta correcta!", currentBlock.id);
+
+            // Coloca el bloque en la parte inferior del área de juego y lo fija
+            yPositions[currentBlock.id] = 600 - (fixedBlockCount * 52) - 48;  // Ajusta la posición Y
+            fixedBlocks[currentBlock.id] = true;  // Marca este bloque como "fijado"
+            fixedBlockCount++;  // Incrementa el número de bloques fijados
+            totalFixedBlocks++;  // Incrementa el número total de bloques fijados
+            sumTotalHeight += 52;  // Actualiza la altura total de los bloques fijados
+
+            // Actualiza la altura del bloque más alto fijado
+            highestFixedBlockY = yPositions[currentBlock.id];
+
+            // Verifica si hay 8 bloques fijados
+            if (fixedBlockCount >= 8) {
+                // Elimina los primeros 7 bloques del arreglo de bloques y ajusta sus posiciones
+                blocks.splice(0, 7);
+                blocks.forEach((block, index) => {
+                    yPositions[block.id] = 600 - (index * 52) - 48;
+                });
+
+                // Mantén actualizados los bloques fijados
+                Object.keys(fixedBlocks).forEach((question, index) => {
+                    if (index < 7) {
+                        delete fixedBlocks[question];
+                    }
+                });
+                fixedBlockCount -= 7;  // Ajusta el contador de bloques fijados
+            }
+
+            // Actualiza el currentBlock al siguiente bloque más reciente
+            const blockIndex = blocks.indexOf(currentBlock);
+            if (blockIndex + 1 < blocks.length) {
+                currentBlock = blocks[blockIndex + 1];  // El siguiente bloque en el orden de salida
+            } else {
+                currentBlock = null;  // No hay más bloques por responder
+            }
+
+        } else {
+            console.log("Respuesta incorrecta", currentBlock ? currentBlock.id : "");
+
+            // Termina el juego si la respuesta es incorrecta
+            clearIntervals();  // Detiene la caída de bloques y la generación de nuevos
+            gameOver = true;
+        }
+
+        // Limpiar el campo de respuesta
+        answer = "";
     }
-  
+
     // Limpia los intervalos cuando el componente se destruye
     onDestroy(() => {
-      clearIntervals();
+        clearIntervals();
     });
-  </script>
+</script>
   
   <!-- Área de juego -->
   <div class="game-area">
@@ -138,14 +176,14 @@
         ¡Perdiste! El juego ha terminado.
       </div>
       <div class="game-over">
-        Puntaje: {fixedBlockCount} - Altura: {sumTotalHeight}
+        Puntaje: {totalFixedBlocks} - Altura: {sumTotalHeight}
       </div>
       <button class="reload-button" on:click={() => location.reload()}>Volver a Jugar</button>
     </div>
     {/if}
   
-    {#each blocks as block (block.question)}
-      <Block {block} yPosition={yPositions[block.question]} {xPosition} />
+    {#each blocks as block (block.id)}
+      <Block {block} yPosition={yPositions[block.id]} {xPosition} />
     {/each}
   </div>
   
