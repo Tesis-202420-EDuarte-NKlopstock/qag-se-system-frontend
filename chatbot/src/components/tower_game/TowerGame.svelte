@@ -168,97 +168,96 @@
     });
 </script>
   
-  <!-- Área de juego -->
-  <div class="game-area">
-    {#if gameOver}
-    <div class="overlay">
-      <div class="game-over">
-        ¡Perdiste! El juego ha terminado.
-      </div>
-      <div class="game-over">
-        Puntaje: {totalFixedBlocks} - Altura: {sumTotalHeight}
-      </div>
-      <button class="reload-button" on:click={() => location.reload()}>Volver a Jugar</button>
+<!-- Área de juego -->
+<div class="game-area">
+  {#if gameOver}
+  <div class="overlay">
+    <div class="game-over">
+      ¡Perdiste! El juego ha terminado.
     </div>
-    {/if}
-  
-    {#each blocks as block (block.id)}
-      <Block {block} yPosition={yPositions[block.id]} {xPosition} />
-    {/each}
+    <div class="game-over">
+      Puntaje: {totalFixedBlocks} - Altura: {sumTotalHeight}
+    </div>
+    <button class="reload-button" on:click={() => location.reload()}>Volver a Jugar</button>
   </div>
-  
-  <!-- Campo de respuesta y botón en la parte inferior -->
-  <div class="answer-area">
-    <input type="text" bind:value={answer} placeholder="Tu respuesta" on:keypress="{e => e.key === 'Enter' && checkAnswer()}" />
-    <button on:click={checkAnswer}>Enviar</button>
-  </div>
-  
-  <style>
-    .game-area {
-      position: relative;
-      height: 600px;
-      width: 600px;
-      border: 2px solid black;
-      margin: 0 auto;
-      overflow: hidden;
-    }
-  
-    .answer-area {
-      position: relative;
+  {/if}
+
+  {#each blocks as block (block.id)}
+    <Block {block} yPosition={yPositions[block.id]} {xPosition} />
+  {/each}
+</div>
+
+<!-- Campo de respuesta y botón en la parte inferior -->
+<div class="answer-area">
+  <input type="text" bind:value={answer} placeholder="Tu respuesta" on:keypress="{e => e.key === 'Enter' && checkAnswer()}" />
+  <button on:click={checkAnswer}>Enviar</button>
+</div>
+
+<style>
+  .game-area {
+    position: relative;
+    height: 600px;
+    width: 600px;
+    border: 2px solid black;
+    margin: 0 auto;
+    overflow: hidden;
+  }
+
+  .answer-area {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);  /* Fondo semi-transparente */
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      margin-top: 20px;
-    }
+      z-index: 10;  /* Asegura que esté sobre los bloques */
+  }
 
-    .overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.7);  /* Fondo semi-transparente */
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        z-index: 10;  /* Asegura que esté sobre los bloques */
-    }
-  
-    input {
-      width: 200px;
-      padding: 10px;
-      margin-right: 10px;
-      font-size: 16px;
-    }
-  
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-    }
-  
-    .game-over {
-      color: red;
-      font-size: 24px;
-      text-align: center;
-      margin-top: 20px;
-    }
+  input {
+    width: 200px;
+    padding: 10px;
+    margin-right: 10px;
+    font-size: 16px;
+  }
 
-    .reload-button {
-      padding: 10px 20px;
-      font-size: 18px;
-      background-color: #3373F6;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-top: 20px;
-      z-index: 12;
-      transition: background-color 0.3s ease;
-    }
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+  }
 
-    .reload-button:hover {
-      background-color: #0048d8;
-    }
-  </style>
-  
+  .game-over {
+    color: red;
+    font-size: 24px;
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .reload-button {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #3373F6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    z-index: 12;
+    transition: background-color 0.3s ease;
+  }
+
+  .reload-button:hover {
+    background-color: #0048d8;
+  }
+</style>

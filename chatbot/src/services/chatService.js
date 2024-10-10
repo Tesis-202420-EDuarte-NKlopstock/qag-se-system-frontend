@@ -14,6 +14,18 @@ export const sendMessage = async (message) => {
     }
 };
 
+export const getPointsCounter = async (userId) => {
+    try {
+        console.log("Getting points counter", userId);
+        const response = await axios.get(`${API_URL}/user_points_counter/${userId}`);
+        console.log("[GetPointsCounter] API Response", response.data);
+        return response.data;
+    } catch (error) {
+        console.error("Error getting points counter", error);
+        throw error;
+    }
+}
+
 export const getQuestions = async () => {
     try {
         const response = await axios.get(`${API_URL}/questions`);

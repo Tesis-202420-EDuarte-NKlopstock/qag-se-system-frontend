@@ -8,6 +8,7 @@
     let currentThreadId = '';
     let isInterrupted = false;
     let isLoading = false;  // Variable que controla el estado de carga
+    let wasAnAskedQuestion = false; // Variable para saber si se hizo una pregunta simple
 
     // Suscribirse a los cambios de la conversación activa
     activeThreadId.subscribe(id => {
@@ -83,6 +84,17 @@
                     isInterrupted = false;  // Reiniciar si no hay interrupción
                 }
 
+                if ([
+                        'La respuesta es incorrecta...',
+                        '¡La respuesta es correcta!',
+                        'La respuesta es correcta!',
+                        'La respuesta es correcta.'
+                    ].includes(response['response'])) {
+
+                    console.log('[ChatBox] Se hizo una pregunta simple');
+                    wasAnAskedQuestion = true;
+                }
+
                 return conv;
             });
         } catch (error) {
@@ -90,6 +102,10 @@
         } finally {
             isLoading = false;  // Ocultar la animación de carga
         }
+    };
+
+    const handleAskedQuestion = () => {
+        wasAnAskedQuestion = false;  // Reiniciar la variable
     };
 </script>
 
@@ -101,34 +117,55 @@
         </div>
     </div>
 
-    <!-- Onda debajo del header -->
     <img src="/assets/background.png" alt="Ola" class="wave-image" />
 
-    <!-- Muestra todos los mensajes -->
     <div class="messages">
         {#each messages as message}
             <MessageBubble {message} />
         {/each}
     </div>
 
-    <!-- Input para escribir y enviar mensajes -->
-    <MessageInput on:sendMessage={handleSendMessage} {isInterrupted} threadId={currentThreadId} />
+    <div class="message-input-container">
+        <MessageInput
+            on:sendMessage={handleSendMessage}
+            on:askedQuestion={handleAskedQuestion}
+            {currentThreadId}
+            {isInterrupted}
+            {wasAnAskedQuestion}
+        />
+    </div>
 </div>
 
 <style>
+    :global(body, html) {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .chatbox {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        max-width: 100%;
+        margin: 0 auto;
+        border: 1px solid #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
     .chat-header {
         padding: 15px;
-        background-color: #3373F6; /* Color de fondo azul */
+        background-color: #3373F6;
         border-bottom: 1px solid #ffffff;
-        border-radius: 10px 10px 0 0;
         color: #ffffff;
-        margin: 0;
         display: flex;
-        align-items: center; /* Alinea verticalmente el logo y el texto */
-        justify-content: space-between; /* Logo a la izquierda y texto a la derecha */
+        align-items: center;
+        justify-content: space-between;
         font-size: 18px;
         font-family: Arial, sans-serif;
-        position: relative;
         z-index: 1;
     }
 
@@ -138,7 +175,7 @@
     }
 
     .logo {
-        width: 80px;  /* Ajusta el tamaño del logo */
+        width: 80px;
         height: 80px;
         margin-right: 15px;
     }
@@ -147,18 +184,7 @@
         width: 100%;
         height: 40px;
         display: block;
-        margin-top: -4px; /* Para que la ola toque el borde del header */
-    }
-
-    .chatbox {
-        display: flex;
-        flex-direction: column;
-        height: 100vh; /* Full screen height */
-        max-width: 100%;
-        margin: 0 auto;
-        border: 1px solid #ffffff;
-        border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin-top: -4px;
     }
 
     .messages {
@@ -166,6 +192,5 @@
         overflow-y: auto;
         padding: 15px;
         background-color: #ffffff;
-        border-bottom: 1px solid #ffffff;
     }
 </style>
