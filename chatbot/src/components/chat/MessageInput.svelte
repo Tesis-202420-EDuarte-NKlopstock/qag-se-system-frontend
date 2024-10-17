@@ -112,13 +112,6 @@ input {
     vertical-align: middle; /* Alinear verticalmente */
 }
 
-.points-counter span {
-    display: flex;
-    align-items: center; /* Alinear verticalmente el contenido del span */
-    justify-content: center;
-    height: 100%; /* Asegurar que ocupe toda la altura del contenedor */
-}
-
 button {
     height: 56px;
     padding: 0 18px;
