@@ -31,8 +31,14 @@
 <!-- Mostrar pantalla de bienvenida solo si `showWelcomeScreen` es true -->
 {#if showWelcomeScreen}
   <div class="welcome-screen">
-      <h1>Bienvenido</h1>
-      <p>Elige una opción:</p>
+      <div class="chat-header">
+        <div class="header-content">
+            <img src="/assets/logo_manchita_white.png" alt="Logo" class="logo" />
+            <h3>¡Bienvenido(a) al Ambiente Gamificado de Manchita! ¡Elige una opción!</h3>
+        </div>
+      </div>
+
+      <img src="/assets/background.png" alt="Ola" class="wave-image" />
 
       <!-- Manejo manual de la navegación -->
       <button on:click={goToGame}>Ir al juego de las torres</button>
@@ -49,11 +55,43 @@
 <style>
   .welcome-screen {
       text-align: center;
-      margin-top: 50px;
   }
+
+  .chat-header {
+      padding: 15px;
+      background-color: #3373F6;
+      border-bottom: 1px solid #ffffff;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 18px;
+      font-family: Arial, sans-serif;
+      z-index: 1;
+  }
+
+  .header-content {
+      display: flex;
+      align-items: center;
+  }
+
+  .logo {
+      width: 80px;
+      height: 80px;
+      margin-right: 15px;
+  }
+
+  .wave-image {
+      width: 100%;
+      height: 40px;
+      display: block;
+      margin-top: -4px;
+  }
+
   button {
       margin: 10px;
       padding: 10px 20px;
       font-size: 18px;
   }
 </style>
+

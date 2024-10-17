@@ -167,7 +167,18 @@
         clearIntervals();
     });
 </script>
-  
+
+<div class="welcome-screen">
+  <div class="chat-header">
+    <div class="header-content">
+        <img src="/assets/logo_manchita_white.png" alt="Logo" class="logo" />
+        <h3>¡Contruye la torre más alta!</h3>
+    </div>
+  </div>
+
+  <img src="/assets/background.png" alt="Ola" class="wave-image" />
+</div>
+
 <!-- Área de juego -->
 <div class="game-area">
   {#if gameOver}
@@ -194,9 +205,45 @@
 </div>
 
 <style>
+  .welcome-screen {
+      text-align: center;
+  }
+
+  .chat-header {
+      padding: 15px;
+      background-color: #3373F6;
+      border-bottom: 1px solid #ffffff;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 18px;
+      font-family: Arial, sans-serif;
+      z-index: 1;
+  }
+
+  .header-content {
+      display: flex;
+      align-items: center;
+  }
+
+  .logo {
+      width: 80px;
+      height: 80px;
+      margin-right: 15px;
+  }
+
+  .wave-image {
+      width: 100%;
+      height: 40px;
+      display: block;
+      margin-top: -4px;
+      margin-bottom: 10px;
+  }
+
   .game-area {
     position: relative;
-    height: 600px;
+    height: 540px;
     width: 600px;
     border: 2px solid black;
     margin: 0 auto;
@@ -228,13 +275,24 @@
   input {
     width: 200px;
     padding: 10px;
+    border-radius: 20px;
     margin-right: 10px;
     font-size: 16px;
+    outline: none;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
   }
 
   button {
     padding: 10px 20px;
     font-size: 16px;
+    border-radius: 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    flex-shrink: 0;
   }
 
   .game-over {
