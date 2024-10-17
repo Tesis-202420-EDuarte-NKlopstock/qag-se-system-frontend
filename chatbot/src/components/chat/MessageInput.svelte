@@ -76,54 +76,58 @@
 </div>
 
 <style>
-.message-input {
-    display: flex;
-    align-items: center;
-    border-top: 1px solid #ccc;
-    padding: 10px;
-    background-color: white;
-    border-radius: 0 0 10px 10px;
-    gap: 10px;
-}
+    .message-input {
+        display: flex;
+        align-items: center;
+        border-top: 1px solid #ccc;
+        padding: 10px;
+        background-color: white;
+        border-radius: 0 0 10px 10px;
+        gap: 10px;
+    }
 
-input {
-    flex-grow: 1;
-    height: 56px;
-    padding: 0 18px;
-    border-radius: 20px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    outline: none;
-    box-sizing: border-box;
-    margin-top: 8px;
-}
+    input {
+        flex-grow: 1;
+        height: 56px;
+        padding: 0 18px;
+        border-radius: 20px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        outline: none;
+        box-sizing: border-box;
+        margin-top: 8px;
+    }
 
-.points-counter {
-    display: flex; /* Asegurar que el contenido se alinee como flex */
-    align-items: center; /* Centrar verticalmente el contenido */
-    justify-content: center; /* Centrar horizontalmente el contenido */
-    height: 56px; /* Asegurar altura consistente */
-    padding: 0 18px;
-    font-size: 16px;
-    border-radius: 100px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-    margin: 0; /* Eliminar márgenes */
-    vertical-align: middle; /* Alinear verticalmente */
-}
+    .points-counter {
+        display: flex; /* Asegurar que el contenido se alinee como flex */
+        align-items: center; /* Centrar verticalmente el contenido */
+        justify-content: center; /* Centrar horizontalmente el contenido */
+        height: 56px; /* Asegurar altura consistente */
+        padding: 0 18px;
+        font-size: 16px;
+        border-radius: 100px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+        margin: 0; /* Eliminar márgenes */
+        vertical-align: middle; /* Alinear verticalmente */
+    }
 
-button {
-    height: 56px;
-    padding: 0 18px;
-    border-radius: 20px;
-    font-size: 16px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    flex-shrink: 0; /* Evitar que se encoja */
-    margin-top: 8px;
-}
+    button {
+        height: 56px;
+        padding: 0 18px;
+        border-radius: 20px;
+        font-size: 16px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        flex-shrink: 0; /* Evitar que se encoja */
+        margin-top: 8px;
+    }
+
+    button:hover {
+      background-color: #2859cc;
+    }
 
 </style>

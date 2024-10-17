@@ -2,6 +2,7 @@
   import { Router, Route, navigate, link } from "svelte-routing";
   import ChatPage from "./pages/ChatPage.svelte";
   import TowerGame from "./components/tower_game/TowerGame.svelte";
+  import Slideshow from "./components/slideshow/Slideshow.svelte";
 
   // Variable para manejar la visibilidad de la pantalla de bienvenida
   let showWelcomeScreen = true;
@@ -41,8 +42,12 @@
       <img src="/assets/background.png" alt="Ola" class="wave-image" />
 
       <!-- Manejo manual de la navegación -->
-      <button on:click={goToGame}>Ir al juego de las torres</button>
-      <button on:click={goToChatbot}>Ir al chatbot</button>
+      <div class="game-buttons">
+        <button on:click={goToGame}>Ir al juego de las torres</button>
+        <button on:click={goToChatbot}>Ir al chatbot</button>
+      </div>
+
+      <Slideshow />
   </div>
 {/if}
 
@@ -88,10 +93,21 @@
       margin-top: -4px;
   }
 
+  .game-buttons {
+      margin-top: 50px;
+  }
+
   button {
-      margin: 10px;
-      padding: 10px 20px;
-      font-size: 18px;
+    background-color: #3373F6;
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #2859cc;
   }
 </style>
 

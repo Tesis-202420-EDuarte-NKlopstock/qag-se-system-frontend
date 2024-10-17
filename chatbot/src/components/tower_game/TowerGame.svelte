@@ -295,6 +295,10 @@
     flex-shrink: 0;
   }
 
+  button:hover {
+      background-color: #2859cc;
+  }
+
   .game-over {
     color: red;
     font-size: 24px;
