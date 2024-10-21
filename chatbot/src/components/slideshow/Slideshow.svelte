@@ -21,7 +21,7 @@
             cuenta que las respuestas pueden tardar un poco debido al tiempo de procesamiento,
             estamos trabajando para optimizar la velocidad de respuesta. Es posible que encuentres
             algunas areas en que la información pueda ser afinada o mejorada o incluso desacertada,
-            por lo que te invitamos para consultar las fuentes oficiales para confirmar.`,
+            por lo que te invitamos a consultar las fuentes oficiales para confirmar.`,
             `Tu contribución es vital para perfeccionar este asistente, gracias por formar parte de
             este proceso y ayudarnos a construir una herramienta más efectiva para la comunidad de
             Bellas Artes.`,
@@ -48,7 +48,7 @@
             narra una historia con tres (3) personajes. Cada uno te hace una pregunta. Si la respondes
             bien, puedes continuar con el juego.`,
             `¡Luego de responder bien una pregunta, dile a Manchita que siga con la historia!`,
-            `Le puedes decir algo como "¡Sigue con la historia, Manchita!"`,
+            `Le puedes decir algo como: "¡Sigue con la historia, Manchita!"`,
             `¡Tienes tres vidas en toda la historia para responder correctamente!`,
             `Para jugar las historias, le puedes decir a Manchita, por ejemplo, "¡Quiero jugar las historias!".`
         ],

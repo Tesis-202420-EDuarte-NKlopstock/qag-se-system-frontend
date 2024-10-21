@@ -60,7 +60,9 @@
 <style>
   .welcome-screen {
       text-align: center;
-  }
+      height: 100vh; /* Toma toda la altura de la pantalla */
+      overflow-y: auto; /* Habilita el scroll vertical si el contenido sobrepasa la pantalla */
+    }
 
   .chat-header {
       padding: 15px;
