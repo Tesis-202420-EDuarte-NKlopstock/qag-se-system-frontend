@@ -1,8 +1,8 @@
 <script>
-    import { onMount } from 'svelte';  // Importar el hook onMount
+    import { onMount } from 'svelte';
     import { createEventDispatcher } from 'svelte';
     import { getPointsCounter } from '../../services/chatService.js';
-    import { get } from 'svelte/store';
+    import { timesInChatbot } from '../../stores.js';
 
     let newMessage = '';
     let currentPoints = 0;
@@ -58,8 +58,15 @@
 
     // Enviar "Hola!" cuando el componente se carga
     onMount(() => {
-        newMessage = 'Hola!';
-        handleSend();  // Llamar a handleSend para enviar el mensaje automáticamente
+        timesInChatbot.subscribe(times => {
+            console.log('Times in chatbot', times);
+            if (times === 0) {
+                newMessage = 'Hola!';
+                handleSend();  // Llamar a handleSend para enviar el mensaje automáticamente
+            }
+        });
+
+        timesInChatbot.set(1);
     });
 </script>
 

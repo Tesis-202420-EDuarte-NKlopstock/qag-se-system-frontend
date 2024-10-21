@@ -1,7 +1,7 @@
 <script>
     import MessageBubble from '../chat/MessageBubble.svelte';
     import MessageInput from '../chat/MessageInput.svelte';
-    import { afterUpdate } from 'svelte';
+    import { afterUpdate, onMount } from 'svelte';
     import { sendMessage } from '../../services/chatService.js';
     import { conversations, activeThreadId } from '../../stores.js';
 
@@ -15,6 +15,7 @@
     // Suscribirse a los cambios de la conversación activa
     activeThreadId.subscribe(id => {
         currentThreadId = id || '';
+        console.log('CurrentThreadId', currentThreadId);
         conversations.subscribe(conv => {
             if (currentThreadId && conv[currentThreadId]) {
                 messages = conv[currentThreadId].messages;  // Cargar los mensajes de la conversación activa

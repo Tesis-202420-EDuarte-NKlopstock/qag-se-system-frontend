@@ -4,6 +4,7 @@
   import ChatPage from "./pages/ChatPage.svelte";
   import TowerGame from "./components/tower_game/TowerGame.svelte";
   import Slideshow from "./components/slideshow/Slideshow.svelte";
+  import { timesInChatbot, conversations, activeThreadId } from './stores';
 
   // Variable para manejar la visibilidad de la pantalla de bienvenida
   let showWelcomeScreen = true;
@@ -22,8 +23,10 @@
   // Evento de retorno para manejar el botón de "back" del navegador
   window.addEventListener('popstate', () => {
       if (window.location.pathname === "/") {
-          showWelcomeScreen = true;
+        location.reload();
+        showWelcomeScreen = true;
       } else {
+          location.reload();
           showWelcomeScreen = false;
       }
   });
@@ -31,12 +34,10 @@
   onMount(() => {
     console.log(window.location.pathname)
     const path = window.location.pathname;
-    if (path === "/") {
-      showWelcomeScreen = true;
-    } else {
-      showWelcomeScreen = false;
-    }
+    showWelcomeScreen = path === "/";
     navigate(path);
+
+    timesInChatbot.set(0);
   });
 
 </script>
