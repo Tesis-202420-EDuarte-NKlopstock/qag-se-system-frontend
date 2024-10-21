@@ -167,17 +167,18 @@
     }
 
     .chat-header {
-        padding: 15px;
-        background-color: #3373F6;
-        border-bottom: 1px solid #ffffff;
-        color: #ffffff;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        font-size: 18px;
-        font-family: Arial, sans-serif;
-        z-index: 1;
-    }
+      padding-left: 10px;
+      height: 10%;
+      background-color: #3373F6;
+      border-bottom: 1px solid #ffffff;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      font-family: Arial, sans-serif;
+      z-index: 1;
+  }
 
     .header-content {
         display: flex;
@@ -185,8 +186,8 @@
     }
 
     .logo {
-        width: 80px;
-        height: 80px;
+        width: 2%;
+        height: 5%;
         margin-right: 15px;
     }
 

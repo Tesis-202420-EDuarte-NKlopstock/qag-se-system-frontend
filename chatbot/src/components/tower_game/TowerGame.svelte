@@ -71,6 +71,12 @@
         });
     }
 
+    // Guardar el estado de un refresh intencional antes de que ocurra el reload
+    function triggerIntentionalRefresh() {
+        sessionStorage.setItem("intentionalRefresh", "true");  // Almacena la intención del refresh
+        location.reload();  // Recargar la página
+    }
+
     // Función para detener todos los intervalos
     function clearIntervals() {
         clearInterval(interval);  // Detiene la caída de bloques
@@ -85,7 +91,7 @@
                     yPositions[block.id] += 12;  // Incrementa la posición Y (caída)
 
                     // Verifica si el bloque ha llegado al fondo del área de juego
-                    if (yPositions[block.id] >= 548) {  // 600 es la altura del área de juego, 50 es la altura del bloque
+                    if (yPositions[block.id] >= 310) {  // 600 es la altura del área de juego, 50 es la altura del bloque
                         console.log(`El bloque ${block.id} ha llegado al fondo.`);
                         clearIntervals();  // Detiene la caída de bloques y la generación de nuevos
                         gameOver = true;  // Termina el juego
@@ -125,7 +131,7 @@
             console.log("¡Respuesta correcta!", currentBlock.id);
 
             // Coloca el bloque en la parte inferior del área de juego y lo fija
-            yPositions[currentBlock.id] = 480 - (fixedBlockCount * 70);  // Ajusta la posición Y
+            yPositions[currentBlock.id] = 310 - (fixedBlockCount * 70);  // Ajusta la posición Y
             fixedBlocks[currentBlock.id] = true;  // Marca este bloque como "fijado"
             fixedBlockCount++;  // Incrementa el número de bloques fijados
             totalFixedBlocks++;  // Incrementa el número total de bloques fijados
@@ -134,21 +140,21 @@
             // Actualiza la altura del bloque más alto fijado
             highestFixedBlockY = yPositions[currentBlock.id];
 
-            // Verifica si hay 5 bloques fijados
-            if (fixedBlockCount >= 5) {
-                // Elimina los primeros 5 bloques del arreglo de bloques y ajusta sus posiciones
-                blocks.splice(0, 4);
+            // Verifica si hay 4 bloques fijados
+            if (fixedBlockCount >= 4) {
+                // Elimina los primeros 3 bloques del arreglo de bloques y ajusta sus posiciones
+                blocks.splice(0, 3);
                 blocks.forEach((block, index) => {
-                    yPositions[block.id] = 480 - (index * 70);
+                    yPositions[block.id] = 310 - (index * 70);
                 });
 
                 // Mantén actualizados los bloques fijados
                 Object.keys(fixedBlocks).forEach((question, index) => {
-                    if (index < 3) {
+                    if (index < 1) {
                         delete fixedBlocks[question];
                     }
                 });
-                fixedBlockCount -= 5;  // Ajusta el contador de bloques fijados
+                fixedBlockCount -= 3;  // Ajusta el contador de bloques fijados
             }
 
             // Actualiza el currentBlock al siguiente bloque más reciente
@@ -219,14 +225,15 @@
   }
 
   .chat-header {
-      padding: 15px;
+      padding-left: 10px;
+      height: 10%;
       background-color: #3373F6;
       border-bottom: 1px solid #ffffff;
       color: #ffffff;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-size: 18px;
+      font-size: 14px;
       font-family: Arial, sans-serif;
       z-index: 1;
   }
@@ -237,8 +244,8 @@
   }
 
   .logo {
-      width: 80px;
-      height: 80px;
+      width: 7%;
+      height: 7%;
       margin-right: 15px;
   }
 
@@ -247,13 +254,13 @@
       height: 40px;
       display: block;
       margin-top: -4px;
-      margin-bottom: 10px;
+      margin-bottom: 30px;
   }
 
   .game-area {
     position: relative;
-    height: 540px;
-    width: 600px;
+    height: 380px;
+    width: 400px;
     border: 2px solid black;
     margin: 0 auto;
     overflow: hidden;

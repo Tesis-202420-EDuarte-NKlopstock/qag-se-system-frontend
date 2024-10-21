@@ -80,6 +80,7 @@
     .message-input {
         display: flex;
         align-items: center;
+        height: 40px;
         border-top: 1px solid #ccc;
         padding: 10px;
         background-color: white;
@@ -89,10 +90,10 @@
 
     input {
         flex-grow: 1;
-        height: 56px;
+        height: 30px;
         padding: 0 18px;
         border-radius: 20px;
-        font-size: 16px;
+        font-size: 12px;
         border: 1px solid #ccc;
         outline: none;
         box-sizing: border-box;
@@ -103,7 +104,7 @@
         display: flex; /* Asegurar que el contenido se alinee como flex */
         align-items: center; /* Centrar verticalmente el contenido */
         justify-content: center; /* Centrar horizontalmente el contenido */
-        height: 56px; /* Asegurar altura consistente */
+        height: 30px; /* Asegurar altura consistente */
         padding: 0 18px;
         font-size: 16px;
         border-radius: 100px;
@@ -114,17 +115,20 @@
     }
 
     button {
-        height: 56px;
-        padding: 0 18px;
+        display: flex; /* Asegurar que el contenido se alinee como flex */
+        align-items: center; /* Centrar verticalmente el contenido */
+        justify-content: center; /* Centrar horizontalmente el contenido */
+        height: 30px;
+        padding: 0 10px;
         border-radius: 20px;
-        font-size: 16px;
+        font-size: 14px;
         background-color: #007bff;
         color: white;
         border: none;
         cursor: pointer;
         transition: background-color 0.3s ease;
         flex-shrink: 0; /* Evitar que se encoja */
-        margin-top: 8px;
+        margin-top: 7px;
     }
 
     button:hover {

@@ -30,9 +30,13 @@
 
   onMount(() => {
     console.log(window.location.pathname)
-    if (window.location.pathname === '/') {
-        navigate('/');
+    const path = window.location.pathname;
+    if (path === "/") {
+      showWelcomeScreen = true;
+    } else {
+      showWelcomeScreen = false;
     }
+    navigate(path);
   });
 
 </script>
@@ -73,14 +77,15 @@
     }
 
   .chat-header {
-      padding: 15px;
+      padding-left: 10px;
+      height: 10%;
       background-color: #3373F6;
       border-bottom: 1px solid #ffffff;
       color: #ffffff;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-size: 18px;
+      font-size: 14px;
       font-family: Arial, sans-serif;
       z-index: 1;
   }
@@ -91,8 +96,8 @@
   }
 
   .logo {
-      width: 80px;
-      height: 80px;
+      width: 5%;
+      height: 5%;
       margin-right: 15px;
   }
 
