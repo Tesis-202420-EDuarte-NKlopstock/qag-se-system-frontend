@@ -23,13 +23,13 @@
             if (isInterrupted) {
                 messageObject = {
                     "query": "",
-                    "thread_id": threadId.startsWith('new') ? "" : threadId,  // Enviar "" si es una nueva conversación
+                    "thread_id": threadId,  // Enviar "" si es una nueva conversación
                     "user_answer": newMessage
                 };
             } else {
                 // Si no está interrumpida, enviamos el mensaje normal con "query"
                 messageObject = {
-                    "thread_id": threadId.startsWith('new') ? "" : threadId,  // Enviar "" si es una nueva conversación
+                    "thread_id": threadId,  // Enviar "" si es una nueva conversación
                     "query": newMessage
                 };
             }
