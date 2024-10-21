@@ -1,7 +1,7 @@
 <script>
     export let block;
     export let yPosition;
-    export let xPosition = 0;  // Ya no necesitamos cambiarlo, lo manejamos en CSS
+    export const xPosition = 0;  // Ya no necesitamos cambiarlo, lo manejamos en CSS
   </script>
   
   <!-- Representación visual del bloque -->
