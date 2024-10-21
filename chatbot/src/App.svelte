@@ -25,6 +25,7 @@
       if (window.location.pathname === "/") {
         location.reload();
         showWelcomeScreen = true;
+        navigate("/");
       } else {
           location.reload();
           showWelcomeScreen = false;
