@@ -22,14 +22,15 @@
 
   // Evento de retorno para manejar el botón de "back" del navegador
   window.addEventListener('popstate', () => {
-      if (window.location.pathname === "/") {
-        location.reload();
-        showWelcomeScreen = true;
-        navigate("/");
-      } else {
-          location.reload();
-          showWelcomeScreen = false;
-      }
+    if (window.location.pathname === "/") {
+      location.reload();
+      showWelcomeScreen = true;
+    } else {
+      location.reload();
+      showWelcomeScreen = false;
+    }
+    
+    navigate("/");
   });
 
   onMount(() => {
