@@ -8,12 +8,13 @@
     let currentPoints = 0;
     let askedQuestions = 0;
     const dispatch = createEventDispatcher();
-    export let isInterrupted = false;  // Variable para saber si el flujo está interrumpido
-    export let threadId = '';  // Se recibirá desde ChatBox el threadId actual
-    export let wasAnAskedQuestion = false;  // Variable para saber si se hizo una pregunta simple
+    export let isInterrupted;  // Variable para saber si el flujo está interrumpido
+    export let currentThreadId;  // Se recibirá desde ChatBox el currentThreadId actual
+    export let wasAnAskedQuestion;  // Variable para saber si se hizo una pregunta simple
 
     // Función que se ejecuta al enviar el mensaje
     const handleSend = () => {
+        console.log('ESTE 2', currentThreadId)
         if (newMessage === '') return;
         
         if (newMessage.trim()) {
@@ -23,13 +24,13 @@
             if (isInterrupted) {
                 messageObject = {
                     "query": "",
-                    "thread_id": threadId,  // Enviar "" si es una nueva conversación
+                    "thread_id": currentThreadId,  // Enviar "" si es una nueva conversación
                     "user_answer": newMessage
                 };
             } else {
                 // Si no está interrumpida, enviamos el mensaje normal con "query"
                 messageObject = {
-                    "thread_id": threadId,  // Enviar "" si es una nueva conversación
+                    "thread_id": currentThreadId,  // Enviar "" si es una nueva conversación
                     "query": newMessage
                 };
             }
@@ -42,7 +43,7 @@
 
     const updateCounters = async () => {
         console.log('[MessageInput] Se hizo una pregunta simple');
-        const res = await getPointsCounter(threadId);
+        const res = await getPointsCounter(currentThreadId);
         currentPoints = res["current_points"];
         askedQuestions = res["asked_questions"];
 

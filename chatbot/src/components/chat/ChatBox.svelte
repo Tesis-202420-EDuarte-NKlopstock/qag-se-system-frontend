@@ -1,10 +1,12 @@
 <script>
     import MessageBubble from '../chat/MessageBubble.svelte';
     import MessageInput from '../chat/MessageInput.svelte';
+    import { afterUpdate } from 'svelte';
     import { sendMessage } from '../../services/chatService.js';
     import { conversations, activeThreadId } from '../../stores.js';
 
     let messages = [];
+    let messagesContainer;
     let currentThreadId = '';
     let isInterrupted = false;
     let isLoading = false;  // Variable que controla el estado de carga
@@ -84,7 +86,7 @@
                     isInterrupted = false;  // Reiniciar si no hay interrupción
                 }
 
-                if ([
+                if ([   // frases típicas del agente cuando el usuario responde bien o mal.
                         'La respuesta es incorrecta...',
                         '¡La respuesta es correcta!',
                         'La respuesta es correcta!',
@@ -95,6 +97,7 @@
                     wasAnAskedQuestion = true;
                 }
 
+                console.log('ESTE', currentThreadId)
                 return conv;
             });
         } catch (error) {
@@ -107,6 +110,13 @@
     const handleAskedQuestion = () => {
         wasAnAskedQuestion = false;  // Reiniciar la variable
     };
+
+    afterUpdate(() => {
+        // Desplaza hacia abajo automáticamente cuando haya nuevos mensajes
+        if (messagesContainer) {
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+    });
 </script>
 
 <div class="chatbox">
@@ -119,7 +129,7 @@
 
     <img src="/assets/background.png" alt="Ola" class="wave-image" />
 
-    <div class="messages">
+    <div class="messages" bind:this={messagesContainer}>
         {#each messages as message}
             <MessageBubble {message} />
         {/each}
