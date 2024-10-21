@@ -1,4 +1,5 @@
 <script>
+  import { onMount } from 'svelte';  // Importar el hook onMount
   import { Router, Route, navigate, link } from "svelte-routing";
   import ChatPage from "./pages/ChatPage.svelte";
   import TowerGame from "./components/tower_game/TowerGame.svelte";
@@ -25,6 +26,13 @@
       } else {
           showWelcomeScreen = false;
       }
+  });
+
+  onMount(() => {
+    console.log(window.location.pathname)
+    if (window.location.pathname === '/') {
+        navigate('/');
+    }
   });
 
 </script>

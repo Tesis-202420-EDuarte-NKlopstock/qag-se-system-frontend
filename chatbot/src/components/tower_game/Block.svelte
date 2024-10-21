@@ -1,7 +1,7 @@
 <script>
     export let block;
     export let yPosition;
-    export const xPosition = 0;  // Ya no necesitamos cambiarlo, lo manejamos en CSS
+    export let xPosition;  // Ya no necesitamos cambiarlo, lo manejamos en CSS
   </script>
   
   <!-- Representación visual del bloque -->
@@ -12,8 +12,8 @@
   <style>
     .block {
       position: absolute;
-      width: 60%;  /* El ancho del bloque es el 60% del contenedor */
-      height: 50px;
+      width: 80%;  /* El ancho del bloque es el 60% del contenedor */
+      height: 70px;
       background-color: lightblue;
       border: 1px solid black;
       left: 50%;  /* Centrar el bloque horizontalmente */

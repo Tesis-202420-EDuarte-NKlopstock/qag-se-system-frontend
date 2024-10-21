@@ -17,14 +17,16 @@
     let totalFixedBlocks = 0;  // Total de bloques fijados
 
     let questions = []; // Arreglo para almacenar las preguntas
+    let usedQuestions = []; // Arreglo para almacenar las preguntas ya usadas
     let answer = "";  // Respuesta ingresada por el usuario
 
     onMount(async () => {
       questions = await getQuestions(); // Inicializar preguntas
+      console.log(questions.length > 0);
+      console.log(typeof(questions));
     });
 
     // Función para agregar un nuevo bloque
-
     function dropBlock() {
         if (questions.length > 0 && !gameOver) {
             // Selecciona una pregunta aleatoria
@@ -42,8 +44,16 @@
                 currentBlock = newBlock;
             }
 
-            // Elimina la pregunta seleccionada del arreglo de preguntas para que no se repita
-            // questions.splice(randomIndex, 1);
+            // Mover la pregunta seleccionada de `questions` a `usedQuestions`
+            usedQuestions.push(randomQuestion);
+            questions.splice(randomIndex, 1);
+
+            // Si solo queda una pregunta en el arreglo `questions`, restablecer el original
+            if (questions.length === 0) {
+                questions = [...usedQuestions];  // Restablece `questions` con las preguntas usadas
+                usedQuestions = [];  // Vacía `usedQuestions` para volver a empezar
+            }
+
             console.log("Nuevo bloque añadido:", newBlock);
         } else {
             console.log("No hay más preguntas o el juego ha terminado.");
@@ -111,35 +121,34 @@
         currentBlock.answer = answer;  // Actualiza la respuesta del bloque actual
         let evaluation = await evaluateAnswer(currentBlock);
 
-        // evaluation['evaluation'] = true; // Simula una respuesta correcta
         if (evaluation['evaluation'] === true) {
             console.log("¡Respuesta correcta!", currentBlock.id);
 
             // Coloca el bloque en la parte inferior del área de juego y lo fija
-            yPositions[currentBlock.id] = 600 - (fixedBlockCount * 52) - 48;  // Ajusta la posición Y
+            yPositions[currentBlock.id] = 480 - (fixedBlockCount * 70);  // Ajusta la posición Y
             fixedBlocks[currentBlock.id] = true;  // Marca este bloque como "fijado"
             fixedBlockCount++;  // Incrementa el número de bloques fijados
             totalFixedBlocks++;  // Incrementa el número total de bloques fijados
-            sumTotalHeight += 52;  // Actualiza la altura total de los bloques fijados
+            sumTotalHeight += 70;  // Actualiza la altura total de los bloques fijados
 
             // Actualiza la altura del bloque más alto fijado
             highestFixedBlockY = yPositions[currentBlock.id];
 
-            // Verifica si hay 8 bloques fijados
-            if (fixedBlockCount >= 8) {
-                // Elimina los primeros 7 bloques del arreglo de bloques y ajusta sus posiciones
-                blocks.splice(0, 7);
+            // Verifica si hay 5 bloques fijados
+            if (fixedBlockCount >= 5) {
+                // Elimina los primeros 5 bloques del arreglo de bloques y ajusta sus posiciones
+                blocks.splice(0, 4);
                 blocks.forEach((block, index) => {
-                    yPositions[block.id] = 600 - (index * 52) - 48;
+                    yPositions[block.id] = 480 - (index * 70);
                 });
 
                 // Mantén actualizados los bloques fijados
                 Object.keys(fixedBlocks).forEach((question, index) => {
-                    if (index < 7) {
+                    if (index < 3) {
                         delete fixedBlocks[question];
                     }
                 });
-                fixedBlockCount -= 7;  // Ajusta el contador de bloques fijados
+                fixedBlockCount -= 5;  // Ajusta el contador de bloques fijados
             }
 
             // Actualiza el currentBlock al siguiente bloque más reciente
@@ -250,6 +259,15 @@
     overflow: hidden;
   }
 
+  /* .game-area {
+    position: relative;
+    height: 60vh; 
+    width: 40vw; 
+    border: 2px solid black;
+    margin: 0 auto;
+    overflow: hidden;
+  } */
+
   .answer-area {
     position: relative;
     display: flex;
@@ -272,7 +290,7 @@
       z-index: 10;  /* Asegura que esté sobre los bloques */
   }
 
-  input {
+  /* input {
     width: 200px;
     padding: 10px;
     border-radius: 20px;
@@ -281,11 +299,34 @@
     outline: none;
     border: 1px solid #ccc;
     box-sizing: border-box;
+  } */
+
+  input {
+    width: 20vw; /* Ajusta el ancho del input al 50% del viewport */
+    padding: 10px;
+    border-radius: 20px;
+    margin-right: 10px;
+    font-size: 16px; /* Usa unidades rem para la fuente */
+    outline: none;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
   }
 
-  button {
+  /* button {
     padding: 10px 20px;
     font-size: 16px;
+    border-radius: 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    flex-shrink: 0;
+  } */
+
+  button {
+    padding: 10px 20px;  /* Tamaño de los botones en unidades rem */
+    font-size: 16px;  /* Tamaño de la fuente en rem */
     border-radius: 20px;
     background-color: #007bff;
     color: white;
