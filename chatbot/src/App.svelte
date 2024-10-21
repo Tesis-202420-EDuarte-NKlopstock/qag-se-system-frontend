@@ -4,7 +4,7 @@
   import ChatPage from "./pages/ChatPage.svelte";
   import TowerGame from "./components/tower_game/TowerGame.svelte";
   import Slideshow from "./components/slideshow/Slideshow.svelte";
-  import { timesInChatbot, conversations, activeThreadId } from './stores';
+  import { conversations, activeThreadId } from './stores';
 
   // Variable para manejar la visibilidad de la pantalla de bienvenida
   let showWelcomeScreen = true;
@@ -36,8 +36,6 @@
     const path = window.location.pathname;
     showWelcomeScreen = path === "/";
     navigate(path);
-
-    timesInChatbot.set(0);
   });
 
 </script>
