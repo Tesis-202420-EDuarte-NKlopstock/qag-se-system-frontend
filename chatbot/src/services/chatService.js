@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_URL = 'http://127.0.0.1:8000'; // Cambia esta URL a tu API
+// const API_URL = 'http://127.0.0.1:8000';
+const API_URL = 'https://34.170.32.46:8000'
 
 export const sendMessage = async (message) => {
     try {
