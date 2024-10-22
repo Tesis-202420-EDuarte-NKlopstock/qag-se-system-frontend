@@ -137,7 +137,7 @@
 
     @media (max-width: 600px) {
         .message-input {
-            padding-bottom: 60%;
+            padding-bottom: 20%;
         }
     }
 
