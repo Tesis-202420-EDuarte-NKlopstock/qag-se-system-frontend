@@ -135,4 +135,10 @@
       background-color: #2859cc;
     }
 
+    @media (max-width: 600px) {
+        .message-input {
+            padding-bottom: 60%;
+        }
+    }
+
 </style>
