@@ -54,6 +54,7 @@
         position: relative;
         margin-right: auto;
         max-width: 60%;
+        white-space: pre-line;
     }
 
     /* Estilo del cuadro de diálogo del usuario */
@@ -65,6 +66,7 @@
         margin-left: auto;
         position: relative;
         max-width: 60%;
+        white-space: pre-line;
     }
 
     /* Ícono de usuario a la derecha */
