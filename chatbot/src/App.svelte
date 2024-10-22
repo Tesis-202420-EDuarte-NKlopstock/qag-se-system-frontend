@@ -54,13 +54,13 @@
 
       <img src="/assets/background.png" alt="Ola" class="wave-image" />
 
+      <Slideshow />
+      
       <!-- Manejo manual de la navegación -->
       <div class="game-buttons">
         <button on:click={goToGame}>Ir al juego de las torres</button>
         <button on:click={goToChatbot}>Ir al chatbot</button>
       </div>
-
-      <Slideshow />
   </div>
 {/if}
 
