@@ -1,129 +1,122 @@
 <script>
-  import { onMount } from 'svelte';  // Importar el hook onMount
-  import { Router, Route, navigate, link } from "svelte-routing";
-  import ChatPage from "./pages/ChatPage.svelte";
-  import TowerGame from "./components/tower_game/TowerGame.svelte";
-  import Slideshow from "./components/slideshow/Slideshow.svelte";
-  import { conversations, activeThreadId } from './stores';
-
-  // Variable para manejar la visibilidad de la pantalla de bienvenida
-  let showWelcomeScreen = true;
-
-  // Función para manejar la navegación programáticamente
-  function goToGame() {
-      navigate("/towergame");
-      showWelcomeScreen = false;  // Oculta la pantalla de bienvenida
-  }
-
-  function goToChatbot() {
-      navigate("/chatbot");
-      showWelcomeScreen = false;  // Oculta la pantalla de bienvenida
-  }
-
-  // Evento de retorno para manejar el botón de "back" del navegador
-  window.addEventListener('popstate', () => {
-    if (window.location.pathname === "/") {
-      location.reload();
-      showWelcomeScreen = true;
-    } else {
-      location.reload();
-      showWelcomeScreen = false;
-    }
-    
-    navigate("/");
-  });
-
-  onMount(() => {
-    console.log(window.location.pathname)
-    const path = window.location.pathname;
-    showWelcomeScreen = path === "/";
-    navigate(path);
-  });
-
-</script>
-
-<!-- Mostrar pantalla de bienvenida solo si `showWelcomeScreen` es true -->
-{#if showWelcomeScreen}
-  <div class="welcome-screen">
-      <div class="chat-header">
-        <div class="header-content">
-            <img src="/assets/logo_manchita_white.png" alt="Logo" class="logo" />
-            <h3>¡Bienvenido(a) al Ambiente Gamificado de Manchita! ¡Elige una opción!</h3>
-        </div>
-      </div>
-
-      <img src="/assets/background.png" alt="Ola" class="wave-image" />
-
-      <Slideshow />
-      
-      <!-- Manejo manual de la navegación -->
-      <div class="game-buttons">
-        <button on:click={goToGame}>Ir al juego de las torres</button>
-        <button on:click={goToChatbot}>Ir al chatbot</button>
-      </div>
-  </div>
-{/if}
-
-<!-- Router para manejar las rutas -->
-<Router>
-  <Route path="/towergame" component={TowerGame} />
-  <Route path="/chatbot" component={ChatPage} />
-</Router>
-
-<style>
-  .welcome-screen {
-      text-align: center;
-      height: 100vh; /* Toma toda la altura de la pantalla */
-      overflow-y: auto; /* Habilita el scroll vertical si el contenido sobrepasa la pantalla */
-    }
-
-  .chat-header {
-      padding-left: 10px;
-      height: 10%;
-      background-color: #3373F6;
-      border-bottom: 1px solid #ffffff;
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 14px;
-      font-family: Arial, sans-serif;
-      z-index: 1;
-  }
-
-  .header-content {
-      display: flex;
-      align-items: center;
-  }
-
-  .logo {
-      width: 5%;
-      height: 5%;
-      margin-right: 15px;
-  }
-
-  .wave-image {
-      width: 100%;
-      height: 40px;
-      display: block;
-      margin-top: -4px;
-  }
-
-  .game-buttons {
-      margin-top: 50px;
-  }
-
-  button {
-    background-color: #3373F6;
-    color: white;
-    border: none;
-    padding: 10px;
-    font-size: 16px;
-    cursor: pointer;
-  }
+    import { onMount } from 'svelte';  // Importar el hook onMount
+    import { Router, Route, navigate, link } from "svelte-routing";
+    import TeacherApp from './pages/TeacherApp.svelte';
+    import StudentApp from './pages/StudentApp.svelte';
+    import ChatBox from './components/chat/ChatBox.svelte';
+    import TowerGame from './components/tower_game/TowerGame.svelte';
   
-  button:hover {
-    background-color: #2859cc;
-  }
-</style>
+    // Variable para manejar la visibilidad de la pantalla de bienvenida
+    let showWelcomeScreen = true;
+  
+    // Función para manejar la navegación programáticamente
+    function goToTeacherApp() {
+        navigate("/teacherapp");
+        showWelcomeScreen = false;  // Oculta la pantalla de bienvenida
+    }
+  
+    function goToStudentApp() {
+        navigate("/studentapp");
+        showWelcomeScreen = false;  // Oculta la pantalla de bienvenida
+    }
+  
+    // Evento de retorno para manejar el botón de "back" del navegador
+    window.addEventListener('popstate', () => {
+      if (window.location.pathname === "/") {
+        location.reload();
+        showWelcomeScreen = true;
+      } else {
+        location.reload();
+        showWelcomeScreen = false;
+      }
+      
+      navigate("/");
+    });
+  
+    onMount(() => {
+      console.log(window.location.pathname)
+      const path = window.location.pathname;
+      showWelcomeScreen = path === "/";
+      navigate(path);
+    });
+  
+  </script>
+  
+  <!-- Mostrar pantalla de bienvenida solo si `showWelcomeScreen` es true -->
+  {#if showWelcomeScreen}
+    <h2>MANCHITA GAMIFICADO</h2>
+    <div class="container">
+        <div class="image">
+            <img src="/assets/logo_manchita_white.png" alt="Logo" class="logo" />
+          </div>
 
+        <!-- Manejo manual de la navegación -->
+        <div class="buttons">
+          <button on:click={goToTeacherApp}>¿Eres un profesor?</button>
+          <button on:click={goToStudentApp}>¿Eres un estudiante?</button>
+        </div>
+    </div>
+  {/if}
+  
+  <!-- Router para manejar las rutas -->
+  <Router>
+    <Route path="/teacherapp" component={TeacherApp} />
+    <Route path="/studentapp" component={StudentApp} />
+    <Route path="/studentapp/chatbot/:code" component={ChatBox} />
+    <Route path="/studentapp/towergame/:code" component={TowerGame} />
+  </Router>
+  
+  <style>
+    h2 {
+      text-align: center;
+      margin: 0; /* Elimina márgenes superiores e inferiores */
+      padding-top: 20px;
+      font-size: xx-large;
+      color: #4285F4;
+      padding-top: 50px;
+    }
+
+    .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: calc(100vh - 60px); /* Asegúrate de que el contenedor llene la pantalla, restando el espacio del h2 */
+      margin: 0; /* Elimina márgenes adicionales */
+    }
+
+    .image {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #4285F4;
+      padding-top: 100px;
+      padding-bottom: 100px;
+    }
+
+    .image img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding-left: 100px;
+      padding-right: 100px;
+    }
+
+    button {
+      background-color: #4285F4;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #357ae8;
+    }
+  </style>

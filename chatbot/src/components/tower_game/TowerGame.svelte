@@ -20,7 +20,13 @@
     let usedQuestions = []; // Arreglo para almacenar las preguntas ya usadas
     let answer = "";  // Respuesta ingresada por el usuario
 
+    let code = "";
+
     onMount(async () => {
+      const params = new URLSearchParams(window.location.search);
+      code = params.get('code') || "";
+      console.log('Código de Conocimiento:', code);
+
       questions = await getQuestions(); // Inicializar preguntas
       console.log(questions.length > 0);
       console.log(typeof(questions));

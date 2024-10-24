@@ -12,6 +12,15 @@
     let isLoading = false;  // Variable que controla el estado de carga
     let wasAnAskedQuestion = false; // Variable para saber si se hizo una pregunta simple
 
+    export let params;
+    let code;
+
+    onMount(() => {
+        console.log('ChatBox', window.location.pathname);
+        code = params.get('code') || "";
+        console.log('Código de Conocimiento:', code);
+    });
+
     // Suscribirse a los cambios de la conversación activa
     activeThreadId.subscribe(id => {
         currentThreadId = id || '';
