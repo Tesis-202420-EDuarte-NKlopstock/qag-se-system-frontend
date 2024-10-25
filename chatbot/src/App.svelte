@@ -1,8 +1,8 @@
 <script>
     import { onMount } from 'svelte';  // Importar el hook onMount
     import { Router, Route, navigate, link } from "svelte-routing";
-    import TeacherApp from './pages/TeacherApp.svelte';
-    import StudentApp from './pages/StudentApp.svelte';
+    import TeacherPage from './pages/TeacherPage.svelte';
+    import StudentPage from './pages/StudentPage.svelte';
     import ChatBox from './components/chat/ChatBox.svelte';
     import TowerGame from './components/tower_game/TowerGame.svelte';
   
@@ -10,13 +10,13 @@
     let showWelcomeScreen = true;
   
     // Función para manejar la navegación programáticamente
-    function goToTeacherApp() {
-        navigate("/teacherapp");
+    function goToTeacherPage() {
+        navigate("/teacher-page");
         showWelcomeScreen = false;  // Oculta la pantalla de bienvenida
     }
   
-    function goToStudentApp() {
-        navigate("/studentapp");
+    function goToStudentPage() {
+        navigate("/student-page");
         showWelcomeScreen = false;  // Oculta la pantalla de bienvenida
     }
   
@@ -52,18 +52,18 @@
 
         <!-- Manejo manual de la navegación -->
         <div class="buttons">
-          <button on:click={goToTeacherApp}>¿Eres un profesor?</button>
-          <button on:click={goToStudentApp}>¿Eres un estudiante?</button>
+          <button on:click={goToTeacherPage}>¿Eres un profesor?</button>
+          <button on:click={goToStudentPage}>¿Eres un estudiante?</button>
         </div>
     </div>
   {/if}
   
   <!-- Router para manejar las rutas -->
   <Router>
-    <Route path="/teacherapp" component={TeacherApp} />
-    <Route path="/studentapp" component={StudentApp} />
-    <Route path="/studentapp/chatbot/:code" component={ChatBox} />
-    <Route path="/studentapp/towergame/:code" component={TowerGame} />
+    <Route path="/teacher-page" component={TeacherPage} />
+    <Route path="/student-page" component={StudentPage} />
+    <Route path="/student-page/chatbot/:code" component={ChatBox} />
+    <Route path="/student-page/towergame/:code" component={TowerGame} />
   </Router>
   
   <style>

@@ -17,7 +17,7 @@
 
     const exists = await verifyKnowledgeCode(code);
     if (exists === true) {
-      navigate(`/studentapp/towergame/${code.toUpperCase()}`);
+      navigate(`/StudentPage/towergame/${code.toUpperCase()}`);
     } else {
       alert("El código de conocimiento no existe");
       return
@@ -35,7 +35,7 @@
     const exists = await verifyKnowledgeCode(code);
     if (exists === true) {
       console.log("Navegando al chatbot con el código:", code);
-      navigate(`/studentapp/chatbot/${code.toUpperCase()}`);
+      navigate(`/StudentPage/chatbot/${code.toUpperCase()}`);
     } else {
       alert("El código de conocimiento no existe");
       return
@@ -59,7 +59,7 @@
 
   onMount(() => {
     const path = window.location.pathname;
-    console.log("StudentApp", path)
+    console.log("StudentPage", path)
     navigate(path);
   });
 
