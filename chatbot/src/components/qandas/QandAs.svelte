@@ -2,7 +2,7 @@
     import { createEventDispatcher, onMount } from "svelte";
   
     export let qAndAData = [];  // Se espera recibir el JSON completo como prop
-    
+
     let questions = [];         // Para almacenar el contenido de preguntas ignorando el código
     let knowledgeCode = "";      // Para almacenar el código de conocimiento
   
@@ -24,10 +24,13 @@
   
     // Función para descargar los datos como JSON
     function downloadJSON() {
+      const now = new Date();
+      const formattedDate = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}`;
+
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ content: qAndAData }));
       const downloadAnchor = document.createElement("a");
       downloadAnchor.setAttribute("href", dataStr);
-      downloadAnchor.setAttribute("download", "QandAs.json");
+      downloadAnchor.setAttribute("download", `QandAs_${knowledgeCode}.json`);
       downloadAnchor.click();
     }
   

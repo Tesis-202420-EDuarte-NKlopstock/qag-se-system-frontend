@@ -40,214 +40,48 @@
           console.log("Archivos seleccionados:", selectedFiles);
           
           // Llamada a uploadFile y espera de la respuesta
-          // qAndAData = await uploadFile(selectedFiles);
+          qAndAData = await uploadFile(selectedFiles);
           
           // SOLO PARA TESTING:
-          qAndAData = [
-            {
-              "code": "NKTQNH"
-            },
-            {
-            "question": "¿Cuál es el objetivo general de la asignatura?",
-            "choices": {
-                "a": "Brindar al estudiante herramientas y conceptos básicos del uso de la informática en los procesos de creación, producción y difusión de productos desde el campo del diseño y el entorno artístico en general.",
-                "b": "Conocer y comprender las nuevas tecnologías que se están introduciendo al campo del diseño y de las artes para la creación.",
-                "c": "Facilitar al estudiante el aprendizaje de técnicas avanzadas de diseño y producción artística utilizando las herramientas informáticas más innovadoras.",
-                "d": "Fomentar el desarrollo de habilidades digitales en el campo del diseño y las artes, permitiendo al estudiante utilizar las tecnologías de manera efectiva en su trabajo creativo."
-            },
-            "answer": "a",
-            "type": "MCQ",
-            "difficulty": "Difícil"
-        },
-        {
-            "question": "¿Cuál es la bibliografía complementaria recomendada para la asignatura?",
-            "choices": {
-                "a": "Libro A",
-                "b": "Libro B",
-                "c": "Libro C",
-                "d": "Libro D"
-            },
-            "answer": "a",
-            "type": "MCQ",
-            "difficulty": "Difícil"
-        },
-        {
-            "question": "¿Qué vínculos se establecen entre el arte y la sociedad en la asignatura?",
-            "choices": {
-                "a": "El arte se utiliza como una forma de expresión individual sin relación con la sociedad.",
-                "b": "El arte se utiliza como una forma de crítica social y promueve cambios en la sociedad.",
-                "c": "El arte se utiliza como entretenimiento y no tiene impacto en la sociedad.",
-                "d": "El arte se utiliza como una forma de escapismo y no refleja la realidad social."
-            },
-            "answer": "b",
-            "type": "MCQ",
-            "difficulty": "Fácil"
-        },
-        {
-            "question": "¿Qué tipo de investigaciones se realizan en el semillero de Dramaturgia Performática en espacios no convencionales?",
-            "choices": {
-                "a": "Investigaciones sobre el uso de tecnología en la dramaturgia",
-                "b": "Investigaciones sobre la relación entre música y dramaturgia",
-                "c": "Investigaciones sobre la representación de género en la dramaturgia",
-                "d": "Investigaciones sobre la interacción entre público y actor en espacios no convencionales"
-            },
-            "answer": "d",
-            "type": "MCQ",
-            "difficulty": "Difícil"
-        },
-        {
-            "question": "¿Cuál es la función del blog Confessions of an Aca‐Fan?",
-            "choices": {
-                "a": "Compartir noticias y artículos sobre cine",
-                "b": "Publicar reseñas de libros de diseño gráfico",
-                "c": "Promover la inclusión en el campo del diseño gráfico",
-                "d": "Investigar sobre el cine y sus representaciones"
-            },
-            "answer": "c) Promover la inclusión en el campo del diseño gráfico",
-            "type": "MCQ",
-            "difficulty": "Difícil"
-        },
-        {
-            "question": "¿Cuál es el perfil del docente?",
-            "choices": {
-                "a": "Contar con experiencia docente en educación superior de por lo menos 2 años.",
-                "b": "Poseer formación en docencia y experiencia probada en la docencia universitaria en diseño.",
-                "c": "Tener una producción investigativa académica demostrable.",
-                "d": "Todas las anteriores."
-            },
-            "answer": "d",
-            "type": "MCQ",
-            "difficulty": "Fácil"
-        },
-        {
-            "question": "¿Cuál es la importancia de la interdisciplinariedad en el estudio de la poesía popular?",
-            "choices": {
-                "a": "Permite enriquecer la interpretación vocal de los textos",
-                "b": "Facilita el estudio de la diversidad cultural en Colombia",
-                "c": "Promueve la colaboración entre teatro, poesía, canto y música",
-                "d": "Ayuda a comprender los componentes discursivos del ámbito estético"
-            },
-            "answer": "c",
-            "type": "MCQ",
-            "difficulty": "Difícil"
-        },
-        {
-            "question": "¿Cuáles son algunos de los libros recomendados para la asignatura?",
-            "choices": {
-                "a": "Utopía para realistas",
-                "b": "Teoría de la deriva",
-                "c": "Intuición, acción, creación",
-                "d": "Otro libro"
-            },
-            "answer": "a",
-            "type": "MCQ",
-            "difficulty": "Difícil"
-        },
-        {
-            "question": "¿Cuál es la relación entre el arte y la memoria histórica institucional y regional?",
-            "choices": {
-                "a": "El arte no tiene relación con la memoria histórica",
-                "b": "El arte permite preservar y transmitir la memoria histórica",
-                "c": "El arte es independiente de la memoria histórica",
-                "d": "La memoria histórica no tiene influencia en el arte"
-            },
-            "answer": "b",
-            "type": "MCQ",
-            "difficulty": "Fácil"
-        },
-        {
-            "question": "¿Cuál es la importancia de implementar propuestas en publicaciones digitales?",
-            "choices": {
-                "a": "Atraer a un público más amplio",
-                "b": "Mejorar la calidad de los contenidos",
-                "c": "Facilitar la distribución y acceso a la información",
-                "d": "Generar interacción y participación del público"
-            },
-            "answer": "c",
-            "type": "MCQ",
-            "difficulty": "Difícil"
-        },
-        {
-            "question": "¿Cuál es el impacto del diseño gráfico en la sociedad?",
-            "choices": {
-                "a": "El diseño gráfico tiene un impacto mínimo en la sociedad.",
-                "b": "El diseño gráfico tiene un impacto significativo en la sociedad al comunicar mensajes visuales de manera efectiva.",
-                "c": "El diseño gráfico no tiene ningún impacto en la sociedad.",
-                "d": "El impacto del diseño gráfico en la sociedad depende del contexto y la forma en que se utilice."
-            },
-            "answer": "b",
-            "type": "MCQ",
-            "difficulty": "Difícil"
-        },
-        {
-            "question": "¿Cuál es la función del semillero de Animación en Bellas Artes?",
-            "choices": {
-                "a": "Explorar técnicas de animación tradicional",
-                "b": "Realizar cortos animados con personajes creados por los estudiantes",
-                "c": "Investigar sobre la relación entre arte y sostenibilidad",
-                "d": "Desarrollar habilidades de emprendimiento cultural"
-            },
-            "answer": "b) Realizar cortos animados con personajes creados por los estudiantes",
-            "type": "MCQ",
-            "difficulty": "Fácil"
-        },
-        {
-            "question": "¿Qué se busca lograr con el proyecto Reconocimiento Resultado de Material docente?",
-            "choices": {
-                "a": "Mejorar la calidad del material docente",
-                "b": "Evaluar el desempeño del docente",
-                "c": "Reconocer el resultado del material docente",
-                "d": "Promover el uso de material docente"
-            },
-            "answer": "c) Reconocer el resultado del material docente",
-            "type": "MCQ",
-            "difficulty": "Difícil"
-        },
-        {
-            "question": "¿Qué tipo de acciones promueve el proyecto de investigación Sondas de Profundidad?",
-            "choices": {
-                "a": "Acciones de investigación",
-                "b": "Acciones de diseño",
-                "c": "Acciones de producción",
-                "d": "Acciones de impresión"
-            },
-            "answer": "a",
-            "type": "MCQ",
-            "difficulty": "Difícil"
-        },
-        {
-            "question": "¿Cuál es la importancia de promover el desarrollo y fortalecimiento de capacidades en los sectores sociales?",
-            "choices": {
-                "a": "Mejora la calidad de vida de las personas.",
-                "b": "Favorece el desarrollo económico.",
-                "c": "Promueve la equidad y la inclusión social.",
-                "d": "Incrementa la competitividad internacional."
-            },
-            "answer": "a",
-            "type": "MCQ",
-            "difficulty": "Fácil"
-        },
-        {
-            "question": "¿Es cierto que el Instituto Departamental de Bellas Artes ofrece talleres gratuitos de animación para jóvenes y adolescentes en Cali, Colombia?",
-            "choices": {
-                "a": "Verdadero",
-                "b": "Falso"
-            },
-            "answer": "Falso",
-            "type": "TFQ",
-            "difficulty": "Difícil"
-        },
-        {
-            "question": "El Instituto Departamental de Bellas Artes cuenta con una política de disminución de barreras en infraestructura física.",
-            "choices": {
-                "a": "Verdadero",
-                "b": "Falso"
-            },
-            "answer": "b",
-            "type": "TFQ",
-            "difficulty": "Difícil"
-        }
-          ]
+          // qAndAData = [
+          //   {
+          //     "code": "NKTQNH"
+          //   },
+          //   {
+          //     "question": "¿Cuál es el objetivo general de la asignatura?",
+          //     "choices": {
+          //         "a": "Brindar al estudiante herramientas y conceptos básicos del uso de la informática en los procesos de creación, producción y difusión de productos desde el campo del diseño y el entorno artístico en general.",
+          //         "b": "Conocer y comprender las nuevas tecnologías que se están introduciendo al campo del diseño y de las artes para la creación.",
+          //         "c": "Facilitar al estudiante el aprendizaje de técnicas avanzadas de diseño y producción artística utilizando las herramientas informáticas más innovadoras.",
+          //         "d": "Fomentar el desarrollo de habilidades digitales en el campo del diseño y las artes, permitiendo al estudiante utilizar las tecnologías de manera efectiva en su trabajo creativo."
+          //     },
+          //     "answer": "a",
+          //     "type": "MCQ",
+          //     "difficulty": "Difícil"
+          //   },
+          //   {
+          //     "question": "¿Cuál es la bibliografía complementaria recomendada para la asignatura?",
+          //     "choices": {
+          //         "a": "Libro A",
+          //         "b": "Libro B",
+          //         "c": "Libro C",
+          //         "d": "Libro D"
+          //     },
+          //     "answer": "a",
+          //     "type": "MCQ",
+          //     "difficulty": "Difícil"
+          //   },
+          //   {
+          //     "question": "El Instituto Departamental de Bellas Artes cuenta con una política de disminución de barreras en infraestructura física.",
+          //     "choices": {
+          //         "a": "Verdadero",
+          //         "b": "Falso"
+          //     },
+          //     "answer": "b",
+          //     "type": "TFQ",
+          //     "difficulty": "Difícil"
+          //   }
+          // ];
           
           // Una vez cargado el archivo, muestra el componente QandAs
           showQandAs = true;
@@ -309,9 +143,6 @@
     <!-- Botón de cargar -->
     <div class="button-container {hasScrolled ? 'scrolled': ''}">
       <button class="upload-btn" on:click={handleUpload} disabled={isLoading}>Cargar</button>
-      <!-- {#if hasScrolled}
-        <div class="scroll-line"></div>
-      {/if} -->
     </div>
     
     <!-- Mostrar spinner de carga cuando isLoading es verdadero -->
@@ -408,17 +239,6 @@
       display: flex;
       justify-content: center;
       margin-top: 20px;
-    }
-
-    /* Línea que se mostrará al detectar scroll */
-    .scroll-line {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background-color: transparent; /* Se oculta inicialmente */
-      transition: background-color 0.3s ease;
     }
 
     .scrolled {
