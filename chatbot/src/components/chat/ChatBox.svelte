@@ -72,12 +72,8 @@
 
         // Obtener la respuesta del bot
         try {
-<<<<<<< HEAD
             if (isLoading === true) {
                 const response = await sendMessage(message.detail);
-=======
-            const response = await sendMessage(messageDetails);
->>>>>>> 0a842f08e94dc2b6ca2bef0c385d3a2772d711ca
 
                 // Actualizar la conversación con la respuesta real del bot
                 conversations.update(conv => {
