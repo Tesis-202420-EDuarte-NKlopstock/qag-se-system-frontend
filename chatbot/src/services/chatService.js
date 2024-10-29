@@ -15,10 +15,10 @@ export const sendMessage = async (message) => {
     }
 };
 
-export const getPointsCounter = async (userId) => {
+export const getPointsCounter = async (userId, db_id) => {
     try {
-        console.log("Getting points counter", userId);
-        const response = await axios.get(`${API_URL}/user_points_counter/${userId}`);
+        console.log(`Getting points counter for user ${userId} and db_id ${db_id}`);
+        const response = await axios.get(`${API_URL}/user_points_counter/${userId}/${db_id}`);
         console.log("[GetPointsCounter] API Response", response.data);
         return response.data;
     } catch (error) {
@@ -52,8 +52,8 @@ export const evaluateAnswer = async (input) => {
 
 export const verifyKnowledgeCode = async (bdId) => {
     try {
-        console.log("Getting code verification", bdId);
-        const response = await axios.get(`${API_URL}/knowledge_base_exists/${bdId}`);
+        console.log("Getting code verification", bdId.toUpperCase());
+        const response = await axios.get(`${API_URL}/knowledge_base_exists/${bdId.toUpperCase()}`);
         console.log("[VerifyKnowledgeCode] API Response", response.data);
         return response.data;
     } catch (error) {

@@ -48,7 +48,7 @@
             narra una historia con tres (3) personajes. Cada uno te hace una pregunta. Si la respondes
             bien, puedes continuar con el juego.`,
             `¡Luego de responder bien una pregunta, dile a Manchita que siga con la historia!`,
-            `Le puedes decir algo como: "¡Sigue con la historia, Manchita!"`,
+            `Le puedes decir algo como: "¡Sigue con la historia!"`,
             `¡Tienes tres vidas en toda la historia para responder correctamente!`,
             `Para jugar las historias, le puedes decir a Manchita, por ejemplo, "¡Quiero jugar las historias!".`
         ],

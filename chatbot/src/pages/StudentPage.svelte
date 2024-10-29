@@ -16,8 +16,8 @@
     }
 
     const exists = await verifyKnowledgeCode(code);
-    if (exists === true) {
-      navigate(`/StudentPage/towergame/${code.toUpperCase()}`);
+    if (exists['database_path'] === true) {
+      navigate(`/student-page/towergame/${code.toUpperCase()}`);
     } else {
       alert("El código de conocimiento no existe");
       return
@@ -33,9 +33,9 @@
     }
     
     const exists = await verifyKnowledgeCode(code);
-    if (exists === true) {
+    if (exists['database_path'] === true) {
       console.log("Navegando al chatbot con el código:", code);
-      navigate(`/StudentPage/chatbot/${code.toUpperCase()}`);
+      navigate(`/student-page/chatbot/${code.toUpperCase()}`);
     } else {
       alert("El código de conocimiento no existe");
       return

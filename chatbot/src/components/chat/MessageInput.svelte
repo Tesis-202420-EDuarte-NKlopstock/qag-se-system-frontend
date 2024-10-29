@@ -8,6 +8,7 @@
     let currentPoints = 0;
     let askedQuestions = 0;
     const dispatch = createEventDispatcher();
+    export let code;
     export let isInterrupted;  // Variable para saber si el flujo está interrumpido
     export let currentThreadId;  // Se recibirá desde ChatBox el currentThreadId actual
     export let wasAnAskedQuestion;  // Variable para saber si se hizo una pregunta simple
@@ -43,7 +44,7 @@
 
     const updateCounters = async () => {
         console.log('[MessageInput] Se hizo una pregunta simple');
-        const res = await getPointsCounter(currentThreadId);
+        const res = await getPointsCounter(currentThreadId, code);
         currentPoints = res["current_points"];
         askedQuestions = res["asked_questions"];
 

@@ -52,8 +52,8 @@
 
         <!-- Manejo manual de la navegación -->
         <div class="buttons">
-          <button on:click={goToTeacherPage}>¿Eres un profesor?</button>
-          <button on:click={goToStudentPage}>¿Eres un estudiante?</button>
+          <button on:click={goToTeacherPage}>Soy un profesor</button>
+          <button on:click={goToStudentPage}>Soy un estudiante</button>
         </div>
     </div>
   {/if}

@@ -12,12 +12,9 @@
     let isLoading = false;  // Variable que controla el estado de carga
     let wasAnAskedQuestion = false; // Variable para saber si se hizo una pregunta simple
 
-    export let params;
-    let code;
+    export let code;
 
     onMount(() => {
-        console.log('ChatBox', window.location.pathname);
-        code = params.get('code') || "";
         console.log('Código de Conocimiento:', code);
     });
 
@@ -36,6 +33,11 @@
 
     // Función que se ejecuta cuando el usuario envía un mensaje
     const handleSendMessage = async (message) => {
+        const messageDetails = {
+            ...message.detail,
+            db_id: code  // Agregar "code" bajo la llave 'db_id'
+        };
+
         // Mostrar el mensaje del usuario inmediatamente
         conversations.update(conv => {
             let threadIdToUpdate = currentThreadId;
@@ -48,7 +50,7 @@
             // Agregar el mensaje del usuario
             conv[threadIdToUpdate].messages = [
                 ...conv[threadIdToUpdate].messages,
-                { content: message.detail['query'] || message.detail['user_answer'], sender: 'user' }
+                { content: messageDetails['query'] || messageDetails['user_answer'], sender: 'user' }
             ];
 
             return conv;
@@ -70,7 +72,7 @@
 
         // Obtener la respuesta del bot
         try {
-            const response = await sendMessage(message.detail);
+            const response = await sendMessage(messageDetails);
 
             // Actualizar la conversación con la respuesta real del bot
             conversations.update(conv => {
@@ -149,6 +151,7 @@
         <MessageInput
             on:sendMessage={handleSendMessage}
             on:askedQuestion={handleAskedQuestion}
+            {code}
             {currentThreadId}
             {isInterrupted}
             {wasAnAskedQuestion}
