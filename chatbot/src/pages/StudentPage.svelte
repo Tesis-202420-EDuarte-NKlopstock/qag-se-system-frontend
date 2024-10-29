@@ -17,10 +17,16 @@
       return;
     }
 
+<<<<<<< HEAD
     // const exists = await verifyKnowledgeCode(code);
     const exists = true;
     if (exists === true) {
       navigate(`/towergame/${code.toUpperCase()}`);
+=======
+    const exists = await verifyKnowledgeCode(code);
+    if (exists['database_path'] === true) {
+      navigate(`/student-page/towergame/${code.toUpperCase()}`);
+>>>>>>> 0a842f08e94dc2b6ca2bef0c385d3a2772d711ca
     } else {
       alert("El código de conocimiento no existe");
       return
@@ -36,9 +42,13 @@
     }
     
     const exists = await verifyKnowledgeCode(code);
-    if (exists === true) {
+    if (exists['database_path'] === true) {
       console.log("Navegando al chatbot con el código:", code);
+<<<<<<< HEAD
       navigate(`/chatbot/${code.toUpperCase()}`);
+=======
+      navigate(`/student-page/chatbot/${code.toUpperCase()}`);
+>>>>>>> 0a842f08e94dc2b6ca2bef0c385d3a2772d711ca
     } else {
       alert("El código de conocimiento no existe");
       return

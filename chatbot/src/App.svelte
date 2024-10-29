@@ -6,7 +6,35 @@
   import ChatBox from './components/chat/ChatBox.svelte';
   import TowerGame from './components/tower_game/TowerGame.svelte';
 
+<<<<<<< HEAD
   let showWelcomeScreen = true;
+=======
+        <!-- Manejo manual de la navegación -->
+        <div class="buttons">
+          <button on:click={goToTeacherPage}>Soy un profesor</button>
+          <button on:click={goToStudentPage}>Soy un estudiante</button>
+        </div>
+    </div>
+  {/if}
+  
+  <!-- Router para manejar las rutas -->
+  <Router>
+    <Route path="/teacher-page" component={TeacherPage} />
+    <Route path="/student-page" component={StudentPage} />
+    <Route path="/student-page/chatbot/:code" component={ChatBox} />
+    <Route path="/student-page/towergame/:code" component={TowerGame} />
+  </Router>
+  
+  <style>
+    h2 {
+      text-align: center;
+      margin: 0; /* Elimina márgenes superiores e inferiores */
+      padding-top: 20px;
+      font-size: xx-large;
+      color: #4285F4;
+      padding-top: 50px;
+    }
+>>>>>>> 0a842f08e94dc2b6ca2bef0c385d3a2772d711ca
 
   function goToTeacherPage() {
       navigate("/teacher-page");
