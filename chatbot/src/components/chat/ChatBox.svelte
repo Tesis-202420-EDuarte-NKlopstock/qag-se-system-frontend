@@ -70,46 +70,50 @@
 
         // Obtener la respuesta del bot
         try {
-            const response = await sendMessage(message.detail);
+            if (isLoading === true) {
+                const response = await sendMessage(message.detail);
 
-            // Actualizar la conversación con la respuesta real del bot
-            conversations.update(conv => {
-                let threadIdToUpdate = currentThreadId;
+                // Actualizar la conversación con la respuesta real del bot
+                conversations.update(conv => {
+                    let threadIdToUpdate = currentThreadId;
 
-                // Si el thread_id no existe, obtenemos uno del backend
-                if (!currentThreadId || currentThreadId.startsWith('new')) {
-                    const realThreadId = response.thread_id;  // thread_id devuelto por el backend
-                    conv[realThreadId] = conv[currentThreadId];  // Reemplazamos la conversación temporal con la real
-                    delete conv[currentThreadId];  // Eliminamos la conversación temporal
-                    threadIdToUpdate = realThreadId;  // Actualizamos el id de la conversación actual
-                    activeThreadId.set(realThreadId);  // Actualizamos la conversación activa
-                }
+                    // Si el thread_id no existe, obtenemos uno del backend
+                    if (!currentThreadId || currentThreadId.startsWith('new')) {
+                        const realThreadId = response.thread_id;  // thread_id devuelto por el backend
+                        conv[realThreadId] = conv[currentThreadId];  // Reemplazamos la conversación temporal con la real
+                        delete conv[currentThreadId];  // Eliminamos la conversación temporal
+                        threadIdToUpdate = realThreadId;  // Actualizamos el id de la conversación actual
+                        activeThreadId.set(realThreadId);  // Actualizamos la conversación activa
+                    }
 
-                // Actualizamos el mensaje de "Cargando..." con la respuesta del bot
-                conv[threadIdToUpdate].messages = conv[threadIdToUpdate].messages.map(msg =>
-                    msg.isLoading ? { content: response['response'], sender: 'bot' } : msg
-                );
+                    // Actualizamos el mensaje de "Cargando..." con la respuesta del bot
+                    conv[threadIdToUpdate].messages = conv[threadIdToUpdate].messages.map(msg =>
+                        msg.isLoading ? { content: response['response'], sender: 'bot' } : msg
+                    );
 
-                if (response.is_interrupted) {
-                    isInterrupted = true;  // Marcar la conversación como interrumpida
-                } else {
-                    isInterrupted = false;  // Reiniciar si no hay interrupción
-                }
+                    if (response.is_interrupted) {
+                        isInterrupted = true;  // Marcar la conversación como interrumpida
+                    } else {
+                        isInterrupted = false;  // Reiniciar si no hay interrupción
+                    }
 
-                if ([   // frases típicas del agente cuando el usuario responde bien o mal.
-                        'La respuesta es incorrecta...',
-                        '¡La respuesta es correcta!',
-                        'La respuesta es correcta!',
-                        'La respuesta es correcta.'
-                    ].includes(response['response'])) {
+                    if ([   // frases típicas del agente cuando el usuario responde bien o mal.
+                            'La respuesta es incorrecta...',
+                            '¡La respuesta es correcta!',
+                            'La respuesta es correcta!',
+                            'La respuesta es correcta.'
+                        ].includes(response['response'])) {
 
-                    console.log('[ChatBox] Se hizo una pregunta simple');
-                    wasAnAskedQuestion = true;
-                }
+                        console.log('[ChatBox] Se hizo una pregunta simple');
+                        wasAnAskedQuestion = true;
+                    }
 
-                console.log('ESTE', currentThreadId)
-                return conv;
-            });
+                    console.log('ESTE', currentThreadId)
+                    return conv;
+                });
+            } else {
+                alert('¡Espera a que Manchita responda para volver a mandar un mensaje!')
+            }
         } catch (error) {
             console.error('Error enviando mensaje:', error);
         } finally {

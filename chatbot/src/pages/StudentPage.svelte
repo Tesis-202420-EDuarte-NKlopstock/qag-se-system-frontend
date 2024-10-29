@@ -1,6 +1,8 @@
 <script>
   import { onMount } from 'svelte';  // Importar el hook onMount
-  import { navigate } from "svelte-routing";
+  import { Router, Route, navigate, link } from "svelte-routing";
+  import ChatBox from '../components/chat/ChatBox.svelte'
+  import TowerGame from '../components/tower_game/TowerGame.svelte';
   import Slideshow from "../components/slideshow/Slideshow.svelte";
   import { conversations, activeThreadId } from '../stores';
   import { verifyKnowledgeCode } from '../services/chatService.js';
@@ -15,9 +17,10 @@
       return;
     }
 
-    const exists = await verifyKnowledgeCode(code);
+    // const exists = await verifyKnowledgeCode(code);
+    const exists = true;
     if (exists === true) {
-      navigate(`/StudentPage/towergame/${code.toUpperCase()}`);
+      navigate(`/towergame/${code.toUpperCase()}`);
     } else {
       alert("El código de conocimiento no existe");
       return
@@ -35,7 +38,7 @@
     const exists = await verifyKnowledgeCode(code);
     if (exists === true) {
       console.log("Navegando al chatbot con el código:", code);
-      navigate(`/StudentPage/chatbot/${code.toUpperCase()}`);
+      navigate(`/chatbot/${code.toUpperCase()}`);
     } else {
       alert("El código de conocimiento no existe");
       return
@@ -59,7 +62,7 @@
 
   onMount(() => {
     const path = window.location.pathname;
-    console.log("StudentPage", path)
+    showWelcomeScreen = path === "/";
     navigate(path);
   });
 
@@ -87,6 +90,11 @@
 
     <Slideshow />    
 </div>
+
+<Router>
+  <Route path="/chatbot/:code" component={ChatBox} />
+  <Route path="/towergame/:code" component={TowerGame} />
+</Router>
 
 <style>
   .welcome-screen {
