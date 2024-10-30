@@ -70,6 +70,7 @@
         bind:value={newMessage}
         placeholder="Escribe tu mensaje..."
         on:keypress="{e => e.key === 'Enter' && handleSend()}"
+        disabled={isLoading}
     />
     <div class="points-counter">
         <span>{currentPoints}</span> /
