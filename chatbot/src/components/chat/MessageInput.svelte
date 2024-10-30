@@ -9,6 +9,7 @@
     let askedQuestions = 0;
     const dispatch = createEventDispatcher();
     export let code;
+    export let isLoading;
     export let isInterrupted;  // Variable para saber si el flujo está interrumpido
     export let currentThreadId;  // Se recibirá desde ChatBox el currentThreadId actual
     export let wasAnAskedQuestion;  // Variable para saber si se hizo una pregunta simple
@@ -74,7 +75,7 @@
         <span>{currentPoints}</span> /
         <span>{askedQuestions}</span>
     </div>
-    <button on:click={handleSend}>Enviar</button>
+    <button on:click={handleSend} disabled={isLoading}>Enviar</button>
 </div>
 
 <style>

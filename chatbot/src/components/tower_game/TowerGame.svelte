@@ -19,6 +19,7 @@
     let questions = []; // Arreglo para almacenar las preguntas
     let usedQuestions = []; // Arreglo para almacenar las preguntas ya usadas
     let answer = "";  // Respuesta ingresada por el usuario
+    let currentColor = "";
 
     export let code;
 
@@ -30,15 +31,26 @@
       console.log(typeof(questions));
     });
 
+    function getRandomColor() {
+        const letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+
+        return color;
+    }
+
     // Función para agregar un nuevo bloque
     function dropBlock() {
         if (questions.length > 0 && !gameOver) {
             // Selecciona una pregunta aleatoria
             const randomIndex = Math.floor(Math.random() * questions.length);
             const randomQuestion = questions[randomIndex];
+            const color = getRandomColor();
 
             // Crear un nuevo bloque con un id único
-            const newBlock = { id: blockIdCounter++, question: randomQuestion, answer: "" }; // id es para generar preguntas para siempre jiji
+            const newBlock = { id: blockIdCounter++, question: randomQuestion, answer: "", color }; // id es para generar preguntas para siempre jiji
             blocks.push(newBlock);
             yPositions[newBlock.id] = 0;  // Inicializa la posición Y del bloque
             fixedBlocks[newBlock.id] = false;  // Inicializa el estado de "no fijado"
@@ -46,6 +58,7 @@
             // Si no hay un bloque activo, el primer bloque creado se convierte en el currentBlock
             if (currentBlock === null) {
                 currentBlock = newBlock;
+                currentColor = color;
             }
 
             // Mover la pregunta seleccionada de `questions` a `usedQuestions`
@@ -115,6 +128,7 @@
     // Intervalo para soltar un nuevo bloque cada 3 segundos
     const dropBlockInterval = setInterval(() => {
         if (!gameOver) {
+            currentBlock = null;  // Reinicia el bloque actual
             dropBlock();
         }
     }, 6000);
@@ -129,13 +143,13 @@
         }
 
         currentBlock.answer = answer;  // Actualiza la respuesta del bloque actual
-        let evaluation = await evaluateAnswer(currentBlock);
+        let evaluation = await evaluateAnswer(currentBlock, code);
 
         if (evaluation['evaluation'] === true) {
             console.log("¡Respuesta correcta!", currentBlock.id);
 
             // Coloca el bloque en la parte inferior del área de juego y lo fija
-            yPositions[currentBlock.id] = 310 - (fixedBlockCount * 70);  // Ajusta la posición Y
+            yPositions[currentBlock.id] = 360 - (fixedBlockCount * 20);  // Ajusta la posición Y
             fixedBlocks[currentBlock.id] = true;  // Marca este bloque como "fijado"
             fixedBlockCount++;  // Incrementa el número de bloques fijados
             totalFixedBlocks++;  // Incrementa el número total de bloques fijados
@@ -145,28 +159,30 @@
             highestFixedBlockY = yPositions[currentBlock.id];
 
             // Verifica si hay 4 bloques fijados
-            if (fixedBlockCount >= 4) {
+            if (fixedBlockCount >= 10) {
                 // Elimina los primeros 3 bloques del arreglo de bloques y ajusta sus posiciones
-                blocks.splice(0, 3);
+                blocks.splice(0, 9);
                 blocks.forEach((block, index) => {
-                    yPositions[block.id] = 310 - (index * 70);
+                    yPositions[block.id] = 360 - (index * 20);
                 });
 
                 // Mantén actualizados los bloques fijados
                 Object.keys(fixedBlocks).forEach((question, index) => {
-                    if (index < 1) {
+                    if (index < 8) {
                         delete fixedBlocks[question];
                     }
                 });
-                fixedBlockCount -= 3;  // Ajusta el contador de bloques fijados
+                fixedBlockCount -= 9;  // Ajusta el contador de bloques fijados
             }
 
             // Actualiza el currentBlock al siguiente bloque más reciente
             const blockIndex = blocks.indexOf(currentBlock);
             if (blockIndex + 1 < blocks.length) {
                 currentBlock = blocks[blockIndex + 1];  // El siguiente bloque en el orden de salida
+                currentColor = currentBlock.color;
             } else {
                 currentBlock = null;  // No hay más bloques por responder
+                currentColor = null;
             }
 
         } else {
@@ -194,33 +210,52 @@
         <h3>¡Contruye la torre más alta!</h3>
     </div>
   </div>
-
   <img src="/assets/background.png" alt="Ola" class="wave-image" />
 </div>
 
-<!-- Área de juego -->
-<div class="game-area">
-  {#if gameOver}
-  <div class="overlay">
-    <div class="game-over">
-      ¡Perdiste! El juego ha terminado.
+<!-- Área principal que contiene la torre y las preguntas a la derecha -->
+<div class="game-container">
+  <!-- Torre de bloques -->
+  <div class="game-area">
+    {#if gameOver}
+    <div class="overlay">
+      <div class="game-over">¡Perdiste! El juego ha terminado.</div>
+      <div class="game-over">Puntaje: {totalFixedBlocks} - Altura: {sumTotalHeight}</div>
+      <button class="reload-button" on:click={() => location.reload()}>Volver a Jugar</button>
     </div>
-    <div class="game-over">
-      Puntaje: {totalFixedBlocks} - Altura: {sumTotalHeight}
-    </div>
-    <button class="reload-button" on:click={() => location.reload()}>Volver a Jugar</button>
+    {/if}
+
+    {#each blocks as block (block.id)}
+      <Block
+        {block}
+        yPosition={yPositions[block.id]}
+        {xPosition}
+        color={block.color}
+      />
+    {/each}
   </div>
-  {/if}
 
-  {#each blocks as block (block.id)}
-    <Block {block} yPosition={yPositions[block.id]} {xPosition} />
-  {/each}
-</div>
+  <!-- Preguntas y campo de respuesta -->
+  <div class="question-area">
+    <p class="question-text" style="color: {currentColor}">
+      {#if currentBlock !== null}
+        {currentBlock.question}
+      {:else}
+        ¡Atento! ¡Ya viene una nueva pregunta!
+      {/if}
+    </p>
 
-<!-- Campo de respuesta y botón en la parte inferior -->
-<div class="answer-area">
-  <input type="text" bind:value={answer} placeholder="Tu respuesta" on:keypress="{e => e.key === 'Enter' && checkAnswer()}" />
-  <button on:click={checkAnswer}>Enviar</button>
+    <div class="answer-area">
+      <input
+        type="text"
+        bind:value={answer}
+        placeholder="Tu respuesta"
+        on:keypress="{e => e.key === 'Enter' && checkAnswer()}"
+        disabled={gameOver}
+      />
+      <button on:click={checkAnswer}>Enviar</button>
+    </div>
+  </div>
 </div>
 
 <style>
@@ -261,30 +296,72 @@
       margin-bottom: 30px;
   }
 
+  .game-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px; /* Espacio entre la torre y la sección de preguntas */
+    max-height: 80vh; /* Limita la altura del contenedor para permitir scroll */
+    overflow-y: auto; /* Activa el scroll vertical */
+  }
+
+  /* Área de juego solo con borde inferior */
   .game-area {
     position: relative;
     height: 380px;
-    width: 400px;
-    border: 2px solid black;
+    width: 500px;
+    border-bottom: 2px solid black; /* Solo borde inferior */
     margin: 0 auto;
     overflow: hidden;
+    margin-left: 150px;
   }
 
-  /* .game-area {
-    position: relative;
-    height: 60vh; 
-    width: 40vw; 
-    border: 2px solid black;
-    margin: 0 auto;
-    overflow: hidden;
-  } */
+  /* Área de las preguntas a la derecha */
+  .question-area {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 300px;
+    padding-top: 100px;
+    padding-right: 200px;
+  }
+
+  .question-text {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
 
   .answer-area {
-    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 20px;
+    gap: 10px;
+  }
+
+  input {
+    width: 160px;
+    padding: 8px;
+    border-radius: 20px;
+    font-size: 14px;
+    outline: none;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+
+  button {
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  button:hover {
+    background-color: #2859cc;
   }
 
   .overlay {
@@ -299,56 +376,6 @@
       justify-content: center;
       align-items: center;
       z-index: 10;  /* Asegura que esté sobre los bloques */
-  }
-
-  /* input {
-    width: 200px;
-    padding: 10px;
-    border-radius: 20px;
-    margin-right: 10px;
-    font-size: 16px;
-    outline: none;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-  } */
-
-  input {
-    width: 20vw; /* Ajusta el ancho del input al 50% del viewport */
-    padding: 10px;
-    border-radius: 20px;
-    margin-right: 10px;
-    font-size: 16px; /* Usa unidades rem para la fuente */
-    outline: none;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-  }
-
-  /* button {
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    flex-shrink: 0;
-  } */
-
-  button {
-    padding: 10px 20px;  /* Tamaño de los botones en unidades rem */
-    font-size: 16px;  /* Tamaño de la fuente en rem */
-    border-radius: 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    flex-shrink: 0;
-  }
-
-  button:hover {
-      background-color: #2859cc;
   }
 
   .game-over {
@@ -374,4 +401,26 @@
   .reload-button:hover {
     background-color: #0048d8;
   }
+
+  @media (max-width: 1024px) {
+    .game-container {
+      flex-direction: column;
+      align-items: center;
+      overflow-y: auto;
+      min-height: 60vh; /* Altura mínima para pantallas pequeñas */
+      max-height: 30vh; /* Altura máxima para que permita el scroll cuando sea necesario */
+      justify-content: center;
+    }
+
+    .game-area {
+      margin: auto;
+    }
+
+    .question-area {
+      padding-top: 20px;
+      padding-right: 0;
+      margin: auto;
+    }
+}
+
 </style>

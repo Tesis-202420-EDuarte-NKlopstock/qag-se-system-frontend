@@ -38,10 +38,10 @@ export const getQuestions = async (code) => {
     }
 }
 
-export const evaluateAnswer = async (input) => {
+export const evaluateAnswer = async (input, code) => {
     try {
         console.log("Evaluating answer", input);
-        const response = await axios.post(`${API_URL}/evaluate`, input);
+        const response = await axios.post(`${API_URL}/evaluate/${code}`, input);
         console.log("[EvaluateAnswer] API Response", response.data);
         return response.data;
     } catch (error) {
