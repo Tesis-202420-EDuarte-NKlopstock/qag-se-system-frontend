@@ -1,32 +1,27 @@
 <script>
   import { onMount } from 'svelte';  // Importar el hook onMount
-  import { Router, Route, navigate, link } from "svelte-routing";
+  import { Router, Route, navigate } from "svelte-routing";
   import ChatBox from '../components/chat/ChatBox.svelte'
   import TowerGame from '../components/tower_game/TowerGame.svelte';
   import Slideshow from "../components/slideshow/Slideshow.svelte";
-  import { conversations, activeThreadId } from '../stores';
   import { verifyKnowledgeCode } from '../services/chatService.js';
 
   // Variable para manejar la visibilidad de la pantalla de bienvenida
   let code = "";
+  let studentName = "";
 
   // Función para manejar la navegación programáticamente
-  async function goToGame() {
+  async function goToTowerGame() {
     if (code.length < 6) {
       alert("El código de conocimiento debe tener 6 caracteres");
       return;
     }
 
-<<<<<<< HEAD
-    // const exists = await verifyKnowledgeCode(code);
-    const exists = true;
-    if (exists === true) {
-      navigate(`/towergame/${code.toUpperCase()}`);
-=======
     const exists = await verifyKnowledgeCode(code);
+    // const exists = true;
     if (exists['database_path'] === true) {
-      navigate(`/student-page/towergame/${code.toUpperCase()}`);
->>>>>>> 0a842f08e94dc2b6ca2bef0c385d3a2772d711ca
+      console.log("Navegando al chatbot con el código:", code);
+      navigate(`/towergame/${code.toUpperCase()}`);
     } else {
       alert("El código de conocimiento no existe");
       return
@@ -44,11 +39,7 @@
     const exists = await verifyKnowledgeCode(code);
     if (exists['database_path'] === true) {
       console.log("Navegando al chatbot con el código:", code);
-<<<<<<< HEAD
       navigate(`/chatbot/${code.toUpperCase()}`);
-=======
-      navigate(`/student-page/chatbot/${code.toUpperCase()}`);
->>>>>>> 0a842f08e94dc2b6ca2bef0c385d3a2772d711ca
     } else {
       alert("El código de conocimiento no existe");
       return
@@ -72,39 +63,48 @@
 
   onMount(() => {
     const path = window.location.pathname;
-    showWelcomeScreen = path === "/";
+    console.log("Path actual:", path);
+    // showWelcomeScreen = path === "/";
     navigate(path);
   });
 
 </script>
 
 <!-- Mostrar pantalla de bienvenida solo si `showWelcomeScreen` es true -->
-<div class="welcome-screen">
-    <div class="chat-header">
-      <div class="header-content">
-        <img src="/assets/logo_manchita_white.png" alt="Logo" class="logo" />
-        <h3>¡Bienvenido(a) al Ambiente Gamificado de Manchita! ¡Elige una opción!</h3>
-      </div>
-    </div>
-    
-    <img src="/assets/background.png" alt="Ola" class="wave-image" />
-
-    <!-- Manejo manual de la navegación -->
-    <div class="game-section">
-      <input type="text" placeholder="código de conocimiento" class="text-input" minlength="6" maxlength="6" bind:value={code} />
-      <div class="game-buttons">
-        <button on:click={goToGame}>Ir al juego de las torres</button>
-        <button on:click={goToChatbot}>Ir al chatbot</button>
-      </div>
-    </div>
-
-    <Slideshow />    
-</div>
-
 <Router>
+  <Route path="/" let:location key="{location.pathname}">
+    <div class="welcome-screen">
+        <div class="chat-header">
+          <div class="header-content">
+            <img src="/assets/logo_manchita_white.png" alt="Logo" class="logo" />
+            <h3>¡Bienvenido(a) al Ambiente Gamificado de Manchita! ¡Elige una opción!</h3>
+          </div>
+        </div>
+        
+        <img src="/assets/background.png" alt="Ola" class="wave-image" />
+
+        <div class="main-content">
+          <Slideshow />
+
+          <div class="game-section">
+              <input type="text" placeholder="código de conocimiento" class="text-input" minlength="6" maxlength="6" bind:value={code} />
+              <input type="text" placeholder="tu nombre" class="text-input second-input" bind:value={studentName} />
+              <div class="game-buttons">
+                  <button on:click={goToTowerGame}>Ir al juego de las torres</button>
+                  <button on:click={goToChatbot}>Ir al chatbot</button>
+              </div>
+          </div>
+      </div>  
+    </div>
+  </Route>
+  <Route path="/chatbot/:code" component={ChatBox} key="{location.pathname}" />
+  <Route path="/towergame/:code" component={TowerGame} key="{location.pathname}" />
+</Router>
+
+<!-- <Router>
   <Route path="/chatbot/:code" component={ChatBox} />
   <Route path="/towergame/:code" component={TowerGame} />
-</Router>
+</Router> -->
 
 <style>
   .welcome-screen {
@@ -145,14 +145,23 @@
       margin-top: -4px;
   }
 
+  .main-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 50px; /* Espaciado entre el slideshow y la sección de juego */
+    /* padding: 20px; */
+    margin-top: -40px;
+  }
+
   .game-section {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 20px;
-    flex: 1 1 50%; /* Ajusta el tamaño del contenedor de la derecha */
-    padding-right: 50px; /* Espaciado a la derecha */
+    padding-right: 90px;
   }
 
   .text-input {
@@ -164,6 +173,10 @@
     text-align: center;
     margin-top: 50px;
     text-transform: uppercase;
+  }
+
+  .second-input {
+    margin-top: 0;
   }
 
   .game-buttons {
@@ -186,6 +199,19 @@
 
   button:hover {
     background-color: #2859cc;
+  }
+
+  @media (max-width: 1024px) {
+    .main-content {
+        flex-direction: column; /* Cambia a columna en pantallas pequeñas */
+    }
+
+    .game-section {
+      order: -1;
+      margin-bottom: -80px;
+      padding-right: 0px;
+    }
+
   }
 </style>
 

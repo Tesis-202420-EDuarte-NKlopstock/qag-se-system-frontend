@@ -27,9 +27,9 @@ export const getPointsCounter = async (userId, db_id) => {
     }
 }
 
-export const getQuestions = async () => {
+export const getQuestions = async (code) => {
     try {
-        const response = await axios.get(`${API_URL}/questions`);
+        const response = await axios.get(`${API_URL}/questions/${code}`);
         console.log("[GetQuestions] API Response", response.data);
         return response.data;
     } catch (error) {

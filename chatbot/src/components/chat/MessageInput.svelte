@@ -99,6 +99,7 @@
         outline: none;
         box-sizing: border-box;
         margin-top: 8px;
+        font-family: Arial, sans-serif;
     }
 
     .points-counter {

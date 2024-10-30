@@ -72,8 +72,8 @@
 
         // Obtener la respuesta del bot
         try {
-            if (isLoading === true) {
-                const response = await sendMessage(message.detail);
+            // if (isLoading === false) {
+                const response = await sendMessage(messageDetails);
 
                 // Actualizar la conversación con la respuesta real del bot
                 conversations.update(conv => {
@@ -113,9 +113,9 @@
                     console.log('ESTE', currentThreadId)
                     return conv;
                 });
-            } else {
-                alert('¡Espera a que Manchita responda para volver a mandar un mensaje!')
-            }
+            // } else {
+            //     alert('¡Espera a que Manchita responda para volver a mandar un mensaje!')
+            // }
         } catch (error) {
             console.error('Error enviando mensaje:', error);
         } finally {
