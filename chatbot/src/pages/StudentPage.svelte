@@ -1,6 +1,7 @@
 <script>
   import { onMount } from 'svelte';  // Importar el hook onMount
   import { Router, Route, navigate } from "svelte-routing";
+  import { studentName } from '../stores.js';
   import ChatBox from '../components/chat/ChatBox.svelte'
   import TowerGame from '../components/tower_game/TowerGame.svelte';
   import Slideshow from "../components/slideshow/Slideshow.svelte";
@@ -8,7 +9,7 @@
 
   // Variable para manejar la visibilidad de la pantalla de bienvenida
   let code = "";
-  let studentName = "";
+  let nameInput = "";
 
   // Función para manejar la navegación programáticamente
   async function goToTowerGame() {
@@ -39,6 +40,7 @@
     const exists = await verifyKnowledgeCode(code);
     if (exists['database_path'] === true) {
       console.log("Navegando al chatbot con el código:", code);
+      studentName.set(nameInput);
       navigate(`/chatbot/${code.toUpperCase()}`);
     } else {
       alert("El código de conocimiento no existe");
@@ -88,7 +90,7 @@
 
           <div class="game-section">
               <input type="text" placeholder="código de conocimiento" class="text-input" minlength="6" maxlength="6" bind:value={code} />
-              <input type="text" placeholder="tu nombre" class="text-input second-input" bind:value={studentName} />
+              <input type="text" placeholder="tu nombre" class="text-input second-input" bind:value={nameInput} />
               <div class="game-buttons">
                   <button on:click={goToTowerGame}>Ir al juego de las torres</button>
                   <button on:click={goToChatbot}>Ir al chatbot</button>

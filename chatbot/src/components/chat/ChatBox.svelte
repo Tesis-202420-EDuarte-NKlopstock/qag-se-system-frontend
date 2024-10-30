@@ -1,6 +1,7 @@
 <script>
     import MessageBubble from '../chat/MessageBubble.svelte';
     import MessageInput from '../chat/MessageInput.svelte';
+    import { studentName } from '../../stores.js';
     import { afterUpdate, onMount } from 'svelte';
     import { sendMessage } from '../../services/chatService.js';
     import { conversations, activeThreadId } from '../../stores.js';
@@ -11,6 +12,12 @@
     let isInterrupted = false;
     let isLoading = false;  // Variable que controla el estado de carga
     let wasAnAskedQuestion = false; // Variable para saber si se hizo una pregunta simple
+    let isFirstMessage = true;
+
+    let name = "";
+    studentName.subscribe(value => {
+        name = value;  // Obtén el valor del store y guárdalo en la variable local
+    });
 
     export let code;
 
@@ -72,7 +79,6 @@
 
         // Obtener la respuesta del bot
         try {
-            // if (isLoading === false) {
             const response = await sendMessage(messageDetails);
 
             // Actualizar la conversación con la respuesta real del bot
@@ -113,9 +119,6 @@
                 console.log('ESTE', currentThreadId)
                 return conv;
             });
-            // } else {
-            //     alert('¡Espera a que Manchita responda para volver a mandar un mensaje!')
-            // }
         } catch (error) {
             console.error('Error enviando mensaje:', error);
         } finally {
@@ -147,7 +150,12 @@
 
     <div class="messages" bind:this={messagesContainer}>
         {#each messages as message}
-            <MessageBubble {message} />
+            {#if message.sender === 'user' && message.content === `¡Hola! Me llamo ${name}`}
+                <MessageBubble message={{ content: "¡Hola!", sender: message.sender }} />
+            {:else}
+                <MessageBubble {message} />
+            {/if}
+            <!-- <MessageBubble {message} /> -->
         {/each}
     </div>
 

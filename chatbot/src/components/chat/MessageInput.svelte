@@ -1,8 +1,8 @@
 <script>
     import { onMount } from 'svelte';  // Importar el hook onMount
     import { createEventDispatcher } from 'svelte';
+    import { studentName } from '../../stores.js';
     import { getPointsCounter } from '../../services/chatService.js';
-    import { get } from 'svelte/store';
 
     let newMessage = '';
     let currentPoints = 0;
@@ -13,6 +13,11 @@
     export let isInterrupted;  // Variable para saber si el flujo está interrumpido
     export let currentThreadId;  // Se recibirá desde ChatBox el currentThreadId actual
     export let wasAnAskedQuestion;  // Variable para saber si se hizo una pregunta simple
+
+    let name = "";
+    studentName.subscribe(value => {
+        name = value;  // Obtén el valor del store y guárdalo en la variable local
+    });
 
     // Función que se ejecuta al enviar el mensaje
     const handleSend = () => {
@@ -60,15 +65,16 @@
 
     // Enviar "Hola!" cuando el componente se carga
     onMount(() => {
-        newMessage = 'Hola!';
+        newMessage = `¡Hola! Me llamo ${name}`;
         handleSend();  // Llamar a handleSend para enviar el mensaje automáticamente
     });
 </script>
 
 <div class="message-input">
-    <input 
+    <textarea 
         bind:value={newMessage}
         placeholder="Escribe tu mensaje..."
+        rows="1"
         on:keypress="{e => e.key === 'Enter' && handleSend()}"
         disabled={isLoading}
     />
@@ -91,17 +97,19 @@
         gap: 10px;
     }
 
-    input {
+    textarea {
         flex-grow: 1;
-        height: 30px;
-        padding: 0 18px;
-        border-radius: 20px;
+        max-height: 150px; /* Limita la altura máxima del textarea */
+        min-height: 30px; /* Altura mínima */
+        padding: 10px;
         font-size: 12px;
+        border-radius: 10px;
         border: 1px solid #ccc;
-        outline: none;
-        box-sizing: border-box;
-        margin-top: 8px;
+        resize: none; /* Evita que el usuario ajuste manualmente el tamaño */
+        overflow-y: auto;
         font-family: Arial, sans-serif;
+        box-sizing: border-box;
+        margin-top: 6px;
     }
 
     .points-counter {
