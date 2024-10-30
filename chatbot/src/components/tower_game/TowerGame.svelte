@@ -128,7 +128,6 @@
     // Intervalo para soltar un nuevo bloque cada 3 segundos
     const dropBlockInterval = setInterval(() => {
         if (!gameOver) {
-            currentBlock = null;  // Reinicia el bloque actual
             dropBlock();
         }
     }, 6000);
