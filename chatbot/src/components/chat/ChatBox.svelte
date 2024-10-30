@@ -105,12 +105,12 @@
                     isInterrupted = false;  // Reiniciar si no hay interrupción
                 }
 
-                if ([   // frases típicas del agente cuando el usuario responde bien o mal.
+                if ([
                         'La respuesta es incorrecta...',
                         '¡La respuesta es correcta!',
                         'La respuesta es correcta!',
                         'La respuesta es correcta.'
-                    ].includes(response['response'])) {
+                    ].some(phrase => response['response'].includes(phrase))) {
 
                     console.log('[ChatBox] Se hizo una pregunta simple');
                     wasAnAskedQuestion = true;
