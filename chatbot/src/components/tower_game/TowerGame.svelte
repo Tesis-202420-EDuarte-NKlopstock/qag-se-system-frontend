@@ -52,7 +52,7 @@
             // Crear un nuevo bloque con un id único
             const newBlock = { id: blockIdCounter++, question: randomQuestion, answer: "", color }; // id es para generar preguntas para siempre jiji
             blocks.push(newBlock);
-            yPositions[newBlock.id] = 0;  // Inicializa la posición Y del bloque
+            yPositions[newBlock.id] = -10;  // Inicializa la posición Y del bloque
             fixedBlocks[newBlock.id] = false;  // Inicializa el estado de "no fijado"
             
             // Si no hay un bloque activo, el primer bloque creado se convierte en el currentBlock
@@ -80,7 +80,7 @@
     // Verifica si algún bloque ha superado la altura del bloque más alto fijado
     function checkGameOver() {
         blocks.forEach((block) => {
-            if (!fixedBlocks[block.id] && (yPositions[block.id] - 50) >= highestFixedBlockY) {
+            if (!fixedBlocks[block.id] && (yPositions[block.id] - 20) >= highestFixedBlockY) {
                 console.log("¡Fin del juego! Un bloque ha pasado la altura permitida.");
                 gameOver = true;
                 clearIntervals();  // Detiene los intervalos
@@ -108,13 +108,13 @@
                     yPositions[block.id] += 12;  // Incrementa la posición Y (caída)
 
                     // Verifica si el bloque ha llegado al fondo del área de juego
-                    if (yPositions[block.id] >= 310) {  // 600 es la altura del área de juego, 50 es la altura del bloque
+                    if (yPositions[block.id] >= 370) {  // 600 es la altura del área de juego, 50 es la altura del bloque
                         console.log(`El bloque ${block.id} ha llegado al fondo.`);
                         clearIntervals();  // Detiene la caída de bloques y la generación de nuevos
                         gameOver = true;  // Termina el juego
                     }
 
-                    if (!fixedBlocks[block.id] && yPositions[block.id] >= (highestFixedBlockY - 30)) {
+                    if (!fixedBlocks[block.id] && yPositions[block.id] >= (highestFixedBlockY - 25)) {
                         console.log("¡Fin del juego! Un bloque ha pasado la altura permitida.");
                         clearIntervals();  // Llama a la función que detiene todos los intervalos
                         gameOver = true;
@@ -152,26 +152,28 @@
             fixedBlocks[currentBlock.id] = true;  // Marca este bloque como "fijado"
             fixedBlockCount++;  // Incrementa el número de bloques fijados
             totalFixedBlocks++;  // Incrementa el número total de bloques fijados
-            sumTotalHeight += 70;  // Actualiza la altura total de los bloques fijados
+            sumTotalHeight += 20;  // Actualiza la altura total de los bloques fijados
 
             // Actualiza la altura del bloque más alto fijado
             highestFixedBlockY = yPositions[currentBlock.id];
 
-            // Verifica si hay 4 bloques fijados
+            // Verifica si hay 10 bloques fijados
             if (fixedBlockCount >= 10) {
-                // Elimina los primeros 3 bloques del arreglo de bloques y ajusta sus posiciones
-                blocks.splice(0, 9);
-                blocks.forEach((block, index) => {
-                    yPositions[block.id] = 360 - (index * 20);
-                });
+                setTimeout(() => {
+                    // Elimina los primeros 9 bloques del arreglo de bloques y ajusta sus posiciones
+                    blocks.splice(0, 9);
+                    blocks.forEach((block, index) => {
+                        yPositions[block.id] = 360 - (index * 20);
+                    });
 
-                // Mantén actualizados los bloques fijados
-                Object.keys(fixedBlocks).forEach((question, index) => {
-                    if (index < 8) {
-                        delete fixedBlocks[question];
-                    }
+                    // Mantén actualizados los bloques fijados
+                    Object.keys(fixedBlocks).forEach((question, index) => {
+                        if (index < 8) {
+                            delete fixedBlocks[question];
+                        }
+                    });
+                    fixedBlockCount -= 9;  // Ajusta el contador de bloques fijados
                 });
-                fixedBlockCount -= 9;  // Ajusta el contador de bloques fijados
             }
 
             // Actualiza el currentBlock al siguiente bloque más reciente
@@ -236,13 +238,15 @@
 
   <!-- Preguntas y campo de respuesta -->
   <div class="question-area">
-    <p class="question-text" style="color: {currentColor}">
-      {#if currentBlock !== null}
-        {currentBlock.question}
-      {:else}
-        ¡Atento! ¡Ya viene una nueva pregunta!
-      {/if}
-    </p>
+    <div class="question-container">
+      <p class="question-text" style="color: {currentColor}">
+        {#if currentBlock !== null}
+          {currentBlock.question}
+        {:else}
+          ¡Atento! ¡Ya viene una nueva pregunta!
+        {/if}
+      </p>
+    </div>
 
     <div class="answer-area">
       <input
@@ -313,6 +317,7 @@
     margin: 0 auto;
     overflow: hidden;
     margin-left: 150px;
+    margin-top: -2px;
   }
 
   /* Área de las preguntas a la derecha */
@@ -401,25 +406,61 @@
     background-color: #0048d8;
   }
 
-  @media (max-width: 1024px) {
-    .game-container {
-      flex-direction: column;
-      align-items: center;
-      overflow-y: auto;
-      min-height: 60vh; /* Altura mínima para pantallas pequeñas */
-      max-height: 30vh; /* Altura máxima para que permita el scroll cuando sea necesario */
-      justify-content: center;
-    }
+  @media (max-width: 790px) {
+  .game-container {
+    display: flex;
+    flex-direction: column; /* Coloca el game-area encima del question-area */
+    align-items: center;
+    justify-content: flex-start;
+    height: 100vh; /* Ocupa toda la pantalla */
+    overflow: hidden; /* Evita el scroll vertical */
+    gap: 10px; /* Espacio entre la torre y la sección de preguntas */
+  }
 
-    .game-area {
-      margin: auto;
-    }
+  .game-area {
+    flex-shrink: 0;
+    position: relative;
+    height: 380px;
+    width: 300px;
+    border-bottom: 2px solid black;
+    overflow: hidden;
+    margin-left: 30%;
+  }
 
-    .question-area {
-      padding-top: 20px;
-      padding-right: 0;
-      margin: auto;
-    }
+  .question-area {
+    display: flex;
+    flex-direction: row; /* Permite que la pregunta crezca horizontalmente hacia la derecha */
+    align-items: center; /* Centra la pregunta verticalmente */
+    justify-content: flex-start;
+    padding: 20px; /* Añade algo de espacio alrededor */
+    width: auto; /* Permite que la pregunta crezca sin limitarse */
+    max-width: 90vw; /* Limita la expansión para mantenerla dentro del viewport */
+    overflow-x: auto; /* Añade scroll horizontal si el contenido es muy grande */
+    margin-top: -2px;
+  }
+
+  .question-container {
+    max-width: 100%;
+    text-align: left;
+    word-wrap: break-word;
+  }
+
+  .question-text {
+    line-height: 1.5;
+    overflow: visible; /* Permite que el texto crezca hacia la derecha */
+  }
 }
 
+@media (max-width: 560px) {
+  .game-area {
+    width: 250px;
+    margin-left: 17%;
+    margin-top: -30px;
+  }
+
+  .answer-area {
+    flex-direction: column;
+    gap: 2px;
+  }
+}
 </style>
