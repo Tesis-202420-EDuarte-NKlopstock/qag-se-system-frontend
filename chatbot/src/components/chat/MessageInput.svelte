@@ -32,12 +32,14 @@
                 messageObject = {
                     "query": "",
                     "thread_id": currentThreadId,  // Enviar "" si es una nueva conversación
+                    "user_name": name,
                     "user_answer": newMessage
                 };
             } else {
                 // Si no está interrumpida, enviamos el mensaje normal con "query"
                 messageObject = {
                     "thread_id": currentThreadId,  // Enviar "" si es una nueva conversación
+                    "user_name": name,
                     "query": newMessage
                 };
             }
