@@ -32,10 +32,10 @@
     });
 
     function getRandomColor() {
-        const letters = '0123456789ABCDEF';
+        const letters = '0123456789ABC';
         let color = '#';
         for (let i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
+            color += letters[Math.floor(Math.random() * letters.length)];
         }
 
         return color;
@@ -316,7 +316,7 @@
     border-bottom: 2px solid black; /* Solo borde inferior */
     margin: 0 auto;
     overflow: hidden;
-    margin-left: 150px;
+    margin-left: 25%;
     margin-top: -2px;
   }
 
@@ -328,7 +328,7 @@
     justify-content: flex-start;
     width: 300px;
     padding-top: 100px;
-    padding-right: 200px;
+    padding-right: 300px;
   }
 
   .question-text {
@@ -406,7 +406,7 @@
     background-color: #0048d8;
   }
 
-  @media (max-width: 790px) {
+  @media (max-width: 1045px) {
   .game-container {
     display: flex;
     flex-direction: column; /* Coloca el game-area encima del question-area */
