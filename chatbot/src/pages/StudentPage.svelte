@@ -22,7 +22,8 @@
     // const exists = true;
     if (exists['database_path'] === true) {
       console.log("Navegando al chatbot con el código:", code);
-      navigate(`/towergame/${code.toUpperCase()}`);
+      // navigate(`/student-page/towergame/${code.toUpperCase()}`);
+      window.open(`/student-page/towergame/${code.toUpperCase()}`, '_blank');
     } else {
       alert("El código de conocimiento no existe");
       return
@@ -41,7 +42,8 @@
     if (exists['database_path'] === true) {
       console.log("Navegando al chatbot con el código:", code);
       studentName.set(nameInput);
-      navigate(`/chatbot/${code.toUpperCase()}`);
+      // navigate(`/student-page/chatbot/${code.toUpperCase()}`);
+      window.open(`/student-page/chatbot/${code.toUpperCase()}`, '_blank');
     } else {
       alert("El código de conocimiento no existe");
       return
@@ -99,8 +101,8 @@
       </div>  
     </div>
   </Route>
-  <Route path="/chatbot/:code" component={ChatBox} key="{location.pathname}" />
-  <Route path="/towergame/:code" component={TowerGame} key="{location.pathname}" />
+  <Route path="/student-page/chatbot/:code" component={ChatBox} key="{location.pathname}" />
+  <Route path="/student-page/towergame/:code" component={TowerGame} key="{location.pathname}" />
 </Router>
 
 <!-- <Router>

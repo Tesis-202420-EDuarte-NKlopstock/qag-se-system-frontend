@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// const API_URL = 'http://localhost:8000';
-const API_URL = 'https://34.70.177.151.nip.io'
+const API_URL = 'http://localhost:8000';
+// const API_URL = 'https://34.70.177.151.nip.io'
 
 export const sendMessage = async (message) => {
     try {
@@ -62,7 +62,7 @@ export const verifyKnowledgeCode = async (bdId) => {
     }
 }
 
-export const uploadFile = async (selectedFiles) => {
+export const uploadFile = async (selectedFiles1, selectedFiles2) => {
     try {
       console.log("Uploading file");
   
@@ -70,8 +70,12 @@ export const uploadFile = async (selectedFiles) => {
       const formData = new FormData();
   
       // Añadir cada archivo seleccionado al FormData
-      selectedFiles.forEach((file) => {
-        formData.append('files', file); // 'files' es el nombre del campo en el servidor
+      selectedFiles1.forEach((file) => {
+        formData.append('files1', file); // 'files' es el nombre del campo en el servidor
+      });
+
+      selectedFiles2.forEach((file) => {
+        formData.append('files2', file); // 'files' es el nombre del campo en el servidor
       });
   
       // Enviar el FormData a la API usando POST
@@ -81,8 +85,8 @@ export const uploadFile = async (selectedFiles) => {
         },
       });
   
-    //   console.log("[UploadFile] API Response", response.data);
-      return response.data;
+      console.log("[UploadFile] API Response", response.data);
+      return (response.data)['content'];
     } catch (error) {
       console.error("Error uploading file", error);
       throw error;

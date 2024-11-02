@@ -1,295 +1,303 @@
-  <script>
-    import { onMount, onDestroy } from "svelte";
-    import { uploadFile } from '../services/chatService.js';
-    import QandAs from '../components/qandas/QandAs.svelte';  // Importa el componente QandAs
-    
-    let selectedFiles = [];
-    let isDragging = false;
-    let isLoading = false;  // Estado de carga
-    let showQandAs = false; // Estado para mostrar QandAs solo después de cargar los archivos
-    let qAndAData = [];     // Almacenará el JSON recibido del backend
-    let hasScrolled = false;
+<script>
+  import { onMount, onDestroy } from "svelte";
+  import { uploadFile } from '../services/chatService.js';
+  import QandAs from '../components/qandas/QandAs.svelte';
 
-    // Función para manejar los archivos seleccionados
-    function handleFileSelect(event) {
-      selectedFiles = [...event.target.files];
-    }
+  let selectedFiles1 = [];
+  let selectedFiles2 = [];
+  let isDragging1 = false;
+  let isDragging2 = false;
+  let isLoading = false;
+  let showQandAs = false;
+  let qAndAData = [];
+  let hasScrolled = false;
 
-    // Función para manejar el arrastre de archivos
-    function handleDrop(event) {
-      event.preventDefault();
-      isDragging = false;
-      const files = [...event.dataTransfer.files];
-      selectedFiles = files;
-    }
-
-    function handleDragOver(event) {
-      event.preventDefault();
-      isDragging = true;
-    }
-
-    function handleDragLeave() {
-      isDragging = false;
-    }
-
-    // Función para cargar los archivos seleccionados
-    async function handleUpload() {
-      if (selectedFiles.length > 0) {
-        isLoading = true;  // Activar estado de carga
-        try {
-          console.log("Archivos seleccionados:", selectedFiles);
-          
-          // Llamada a uploadFile y espera de la respuesta
-          qAndAData = await uploadFile(selectedFiles);
-          
-          // SOLO PARA TESTING:
-          // qAndAData = [
-          //   {
-          //     "code": "NKTQNH"
-          //   },
-          //   {
-          //     "question": "¿Cuál es el objetivo general de la asignatura?",
-          //     "choices": {
-          //         "a": "Brindar al estudiante herramientas y conceptos básicos del uso de la informática en los procesos de creación, producción y difusión de productos desde el campo del diseño y el entorno artístico en general.",
-          //         "b": "Conocer y comprender las nuevas tecnologías que se están introduciendo al campo del diseño y de las artes para la creación.",
-          //         "c": "Facilitar al estudiante el aprendizaje de técnicas avanzadas de diseño y producción artística utilizando las herramientas informáticas más innovadoras.",
-          //         "d": "Fomentar el desarrollo de habilidades digitales en el campo del diseño y las artes, permitiendo al estudiante utilizar las tecnologías de manera efectiva en su trabajo creativo."
-          //     },
-          //     "answer": "a",
-          //     "type": "MCQ",
-          //     "difficulty": "Difícil"
-          //   },
-          //   {
-          //     "question": "¿Cuál es la bibliografía complementaria recomendada para la asignatura?",
-          //     "choices": {
-          //         "a": "Libro A",
-          //         "b": "Libro B",
-          //         "c": "Libro C",
-          //         "d": "Libro D"
-          //     },
-          //     "answer": "a",
-          //     "type": "MCQ",
-          //     "difficulty": "Difícil"
-          //   },
-          //   {
-          //     "question": "El Instituto Departamental de Bellas Artes cuenta con una política de disminución de barreras en infraestructura física.",
-          //     "choices": {
-          //         "a": "Verdadero",
-          //         "b": "Falso"
-          //     },
-          //     "answer": "b",
-          //     "type": "TFQ",
-          //     "difficulty": "Difícil"
-          //   }
-          // ];
-          
-          // Una vez cargado el archivo, muestra el componente QandAs
-          showQandAs = true;
-          alert(`${selectedFiles.length} archivo(s) cargado(s) con éxito`);
-        } catch (error) {
-          console.error("Error al cargar los archivos:", error);
-          alert("Error al cargar los archivos");
-        } finally {
-          isLoading = false;  // Desactivar estado de carga
-        }
+  function handleFileSelect(event, area) {
+      if (area === 1) {
+          selectedFiles1 = [...event.target.files];
       } else {
-        alert("Por favor, selecciona o arrastra archivos primero.");
+          selectedFiles2 = [...event.target.files];
       }
-    }
+  }
 
-    // Función para detectar el scroll en el contenedor
-    function handleScroll(event) {
+  function handleDrop(event, area) {
+      event.preventDefault();
+      if (area === 1) {
+          isDragging1 = false;
+          selectedFiles1 = [...event.dataTransfer.files];
+      } else {
+          isDragging2 = false;
+          selectedFiles2 = [...event.dataTransfer.files];
+      }
+  }
+
+  function handleDragOver(event, area) {
+      event.preventDefault();
+      if (area === 1) {
+          isDragging1 = true;
+      } else {
+          isDragging2 = true;
+      }
+  }
+
+  function handleDragLeave(area) {
+      if (area === 1) {
+          isDragging1 = false;
+      } else {
+          isDragging2 = false;
+      }
+  }
+
+  async function handleUpload() {
+      if (selectedFiles1.length === 0) {
+          alert("Carga un documento de conocimiento");
+          return;
+      }
+      
+      if (selectedFiles1.length > 0) {
+          isLoading = true;
+          try {
+              const filesToUpload = [...selectedFiles1, ...selectedFiles2];
+              console.log("Archivos seleccionados:", filesToUpload);
+
+              qAndAData = await uploadFile(selectedFiles1, selectedFiles2);
+
+              showQandAs = true;
+              alert(`${filesToUpload.length} archivo(s) cargado(s) con éxito`);
+          } catch (error) {
+              console.error("Error al cargar los archivos:", error);
+              alert("Error al cargar los archivos");
+          } finally {
+              isLoading = false;
+          }
+      } else {
+          alert("Por favor, selecciona o arrastra archivos primero.");
+      }
+  }
+
+  function handleScroll(event) {
       hasScrolled = event.detail.scrollTop > 0;
-    }
-  </script>
-  
-  <div class="teacher-app-container">
-    <div class="chat-header">
-      <div class="header-content">
-        <img src="/assets/logo_manchita_white.png" alt="Logo" class="logo" />
-        <h3>¡Bienvenido(a) profesor(a)! ¡Arrastra o selecciona un archivo para generar preguntas y respuestas!</h3>
-      </div>
-    </div>
-    
-    <img src="/assets/background.png" alt="Ola" class="wave-image" />
-    
-    <!-- Área de arrastrar o seleccionar archivos -->
-    <div 
-      class="drop-area" 
-      on:drop={handleDrop} 
-      on:dragover={handleDragOver} 
-      on:dragleave={handleDragLeave}
-      class:is-dragging={isDragging}>
-      
-      <p>{isDragging ? "Suelta los archivos aquí" : "Arrastra y suelta archivos aquí o haz clic para seleccionar"}</p>
-      
-      <input type="file" multiple on:change={handleFileSelect} hidden id="fileInput" />
-      <button class="upload-btn" on:click={() => document.getElementById('fileInput').click()}>
-        Seleccionar archivos
-      </button>
-    
-      <!-- Mostrar archivos seleccionados dentro del área -->
-      {#if selectedFiles.length > 0}
-        <div class="file-list">
-          <ul>
-            {#each selectedFiles as file}
-              <li>{file.name}</li>
-            {/each}
-          </ul>
-        </div>
-      {/if}
-    </div>
-    
-    <!-- Botón de cargar -->
-    <div class="button-container {hasScrolled ? 'scrolled': ''}">
-      <button class="upload-btn" on:click={handleUpload} disabled={isLoading}>Cargar</button>
-    </div>
-    
-    <!-- Mostrar spinner de carga cuando isLoading es verdadero -->
-    {#if isLoading}
-      <div class="loading-spinner">
-        <p>Cargando archivos...</p>
-        <!-- Puedes usar un icono o una animación aquí, te doy un ejemplo simple -->
-        <div class="spinner"></div>
-      </div>
-    {/if}
+  }
+</script>
 
-    {#if showQandAs}
-      <QandAs {qAndAData} on:scroll={handleScroll} />
-    {/if}
+<div class="teacher-app-container">
+  <div class="chat-header">
+      <div class="header-content">
+          <img src="/assets/logo_manchita_white.png" alt="Logo" class="logo" />
+          <h3>¡Bienvenido(a) profesor(a)! ¡Arrastra o selecciona un archivo para generar preguntas y respuestas!</h3>
+      </div>
   </div>
   
-  <style>
-    .teacher-app-container {
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      overflow-y: auto;
-    }
+  <img src="/assets/background.png" alt="Ola" class="wave-image" />
 
-    .chat-header {
-      padding-left: 10px;
-      height: 10%;
-      background-color: #3373F6;
-      border-bottom: 1px solid #ffffff;
-      color: #ffffff;
+  <!-- Contenedor de áreas de arrastre -->
+  <div class="drop-area-container">
+      <!-- Primera área de arrastre -->
+      <div 
+          class="drop-area" 
+          on:drop={(event) => handleDrop(event, 1)} 
+          on:dragover={(event) => handleDragOver(event, 1)} 
+          on:dragleave={() => handleDragLeave(1)}
+          class:is-dragging={isDragging1}>
+
+          <p>{isDragging1 ? "Suelta los archivos aquí" : "Carga de Conocimiento: Arrastra y suelta archivos aquí o haz clic para seleccionar"}</p>
+          <input type="file" multiple on:change={(event) => handleFileSelect(event, 1)} hidden id="fileInput1" />
+          <button class="upload-btn" on:click={() => document.getElementById('fileInput1').click()}>Seleccionar archivos</button>
+          {#if selectedFiles1.length > 0}
+              <div class="file-list">
+                  <ul>
+                      {#each selectedFiles1 as file}
+                          <li>{file.name}</li>
+                      {/each}
+                  </ul>
+              </div>
+          {/if}
+      </div>
+
+      <!-- Segunda área de arrastre -->
+      <div 
+          class="drop-area" 
+          on:drop={(event) => handleDrop(event, 2)} 
+          on:dragover={(event) => handleDragOver(event, 2)} 
+          on:dragleave={() => handleDragLeave(2)}
+          class:is-dragging={isDragging2}>
+
+          <p>{isDragging2 ? "Suelta los archivos aquí" : "Preguntas Existentes: Arrastra y suelta archivos aquí o haz clic para seleccionar"}</p>
+          <input type="file" multiple on:change={(event) => handleFileSelect(event, 2)} hidden id="fileInput2" />
+          <button class="upload-btn" on:click={() => document.getElementById('fileInput2').click()}>Seleccionar archivos</button>
+          {#if selectedFiles2.length > 0}
+              <div class="file-list">
+                  <ul>
+                      {#each selectedFiles2 as file}
+                          <li>{file.name}</li>
+                      {/each}
+                  </ul>
+              </div>
+          {/if}
+      </div>
+  </div>
+
+  <!-- Botón de cargar -->
+  <div class="button-container {hasScrolled ? 'scrolled': ''}">
+      <button class="upload-btn" on:click={handleUpload} disabled={isLoading}>Cargar</button>
+  </div>
+
+  {#if isLoading}
+      <div class="loading-spinner">
+          <p>Cargando archivos...</p>
+          <div class="spinner"></div>
+      </div>
+  {/if}
+
+  {#if showQandAs}
+      <div class="table-container">
+          <QandAs {qAndAData} on:scroll={handleScroll} />
+      </div>
+  {/if}
+</div>
+  
+<style>
+  .teacher-app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow-y: auto;
+  }
+
+  .chat-header {
+    padding-left: 10px;
+    height: 10%;
+    background-color: #3373F6;
+    border-bottom: 1px solid #ffffff;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+    z-index: 1;
+  }
+
+  .header-content {
+    display: flex;
+    align-items: center;
+  }
+
+  .logo {
+    width: 5%;
+    height: 5%;
+    margin-right: 15px;
+  }
+
+  .wave-image {
+    width: 100%;
+    height: 40px;
+    display: block;
+    margin-top: -4px;
+  }
+
+  .drop-area {
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+    margin: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .is-dragging {
+    background-color: #f0f0f0;
+  }
+
+  .drop-area-container {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      font-size: 14px;
-      font-family: Arial, sans-serif;
-      z-index: 1;
-    }
+      gap: 1px;
+      padding-left: 10%;
+      padding-right: 11%;
+  }
 
-    .header-content {
-      display: flex;
-      align-items: center;
-    }
+  .drop-area p {
+    font-size: 16px;
+    color: #888;
+  }
 
-    .logo {
-      width: 5%;
-      height: 5%;
-      margin-right: 15px;
-    }
+  .file-list ul {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 10px;
+  }
 
-    .wave-image {
-      width: 100%;
-      height: 40px;
-      display: block;
-      margin-top: -4px;
-    }
+  .file-list li {
+    background-color: #f9f9f9;
+    padding: 5px;
+    margin-bottom: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #555;
+  }
 
-    .drop-area {
-      border: 2px dashed #ccc;
-      border-radius: 10px;
-      padding: 20px;
-      text-align: center;
-      margin-bottom: 20px;
-      margin: 20px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-  
-    .is-dragging {
-      background-color: #f0f0f0;
-    }
-  
-    .drop-area p {
-      font-size: 16px;
-      color: #888;
-    }
-  
-    .file-list ul {
-      list-style-type: none;
-      padding: 0;
-      margin-top: 10px;
-    }
-  
-    .file-list li {
-      background-color: #f9f9f9;
-      padding: 5px;
-      margin-bottom: 5px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      font-size: 14px;
-      color: #555;
-    }
-  
-    .button-container {
-      display: flex;
-      justify-content: center;
+  .button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .scrolled {
+    border-bottom: 2px solid #4285F4;
+  }
+
+  .upload-btn {
+    background-color: #4285F4;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  .upload-btn:disabled {
+    background-color: #a0a0a0;
+    cursor: not-allowed;
+  }
+
+  .upload-btn:hover:not(:disabled) {
+    background-color: #357ae8;
+  }
+
+  .table-container {
       margin-top: 20px;
-    }
+  }
 
-    .scrolled {
-      border-bottom: 2px solid #4285F4;
-    }
+  /* Spinner de carga */
+  .loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    margin-left: 10px;
+  }
 
-    .upload-btn {
-      background-color: #4285F4;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-      border-radius: 5px;
-    }
+  .spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border-left-color: #4285F4;
+    animation: spin 1s linear infinite;
+    margin-left: 20px;
+  }
 
-    .upload-btn:disabled {
-      background-color: #a0a0a0;
-      cursor: not-allowed;
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
     }
-
-    .upload-btn:hover:not(:disabled) {
-      background-color: #357ae8;
+    100% {
+      transform: rotate(360deg);
     }
-
-    /* Spinner de carga */
-    .loading-spinner {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-top: 10px;
-      margin-left: 10px;
-    }
-
-    .spinner {
-      border: 4px solid rgba(0, 0, 0, 0.1);
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      border-left-color: #4285F4;
-      animation: spin 1s linear infinite;
-      margin-left: 20px;
-    }
-
-    @keyframes spin {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-  </style>
-  
+  }
+</style>

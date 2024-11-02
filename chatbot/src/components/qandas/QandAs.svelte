@@ -11,6 +11,7 @@
     // Procesa los datos y separa el código de conocimiento de las preguntas
     onMount(() => {
       if (qAndAData.length > 0) {
+        console.log(qAndAData);
         knowledgeCode = qAndAData[0].code;
         questions = qAndAData.slice(1); // Ignora el primer elemento que contiene el código
       }
@@ -77,7 +78,7 @@
                 <td contenteditable="true" on:input={(e) => handleEdit(index, 'answer', e.target.textContent)}>
                     {question.answer}
                 </td>
-                <td contenteditable="false" on:input={(e) => handleEdit(index, 'type', e.target.textContent)}>
+                <td contenteditable="true" on:input={(e) => handleEdit(index, 'type', e.target.textContent)}>
                     {question.type}
                 </td>
                 <td contenteditable="true" on:input={(e) => handleEdit(index, 'difficulty', e.target.textContent)}>
