@@ -1,5 +1,7 @@
 <script>
   import { createEventDispatcher, onMount } from "svelte";
+  import { Router, Route, navigate } from "svelte-routing";
+  import Leaderboard from "../leaderboards/Leaderboard.svelte";
 
   export let qAndAData = [];  // Se espera recibir el JSON completo como prop
 
@@ -53,7 +55,7 @@
 
   // Función para manejar el botón de "¡Empecemos!"
   function startQuiz() {
-      alert("¡Empecemos!"); // Aquí podrías redirigir a la próxima pantalla o funcionalidad
+      navigate(`/teacher-page/leaderboards/${knowledgeCode.toUpperCase()}`);
   }
 
   // Actualiza las preguntas cuando se editen en la tabla
@@ -87,53 +89,58 @@
   }
 </script>
 
-<div class="qanda-container" on:scroll={handleScroll}>
-  <!-- Tabla editable de preguntas y respuestas -->
-  <table class="questions-table">
-      <thead>
-      <tr>
-          <th>Pregunta</th>
-          <th>Opciones</th>
-          <th>Respuesta Correcta</th>
-          <th>Tipo</th>
-          <th>Dificultad</th>
-      </tr>
-      </thead>
-      <tbody>
-          {#each questions as question, index}
+<Router>
+  <Route path="/teacher-page" let:location key="{location.pathname}">
+    <div class="qanda-container" on:scroll={handleScroll}>
+      <!-- Tabla editable de preguntas y respuestas -->
+      <table class="questions-table">
+          <thead>
           <tr>
-              <td contenteditable="true" on:input={(e) => handleEdit(index, 'question', e.target.textContent)}>
-                  {question.question}
-              </td>
-              <td>
-                  <ul>
-                  {#each Object.entries(question.choices) as [key, choice]}
-                      <li data-letter={key} contenteditable="true" on:input={(e) => handleEdit(index, `choices.${key}`, e.target.textContent)}>
-                          {choice}
-                      </li>
-                      {/each}
-                  </ul>
-                  <button class="add-choice-btn" on:click={() => addEmptyOption(index)}>+</button>
-              </td>
-              <td contenteditable="true" on:input={(e) => handleEdit(index, 'answer', e.target.textContent)}>
-                  {question.answer}
-              </td>
-              <td contenteditable="true" on:input={(e) => handleEdit(index, 'type', e.target.textContent)}>
-                  {question.type}
-              </td>
-              <td contenteditable="true" on:input={(e) => handleEdit(index, 'difficulty', e.target.textContent)}>
-                  {question.difficulty}
-              </td>
+              <th>Pregunta</th>
+              <th>Opciones</th>
+              <th>Respuesta Correcta</th>
+              <th>Tipo</th>
+              <th>Dificultad</th>
           </tr>
-          {/each}
-      </tbody>
-  </table>
-</div>
-  
-<div class="sticky-buttons">
-  <button on:click={downloadJSON}>Descargar</button>
-  <button on:click={startQuiz}>¡Empecemos!</button>
-</div>
+          </thead>
+          <tbody>
+              {#each questions as question, index}
+              <tr>
+                  <td contenteditable="true" on:input={(e) => handleEdit(index, 'question', e.target.textContent)}>
+                      {question.question}
+                  </td>
+                  <td>
+                      <ul>
+                      {#each Object.entries(question.choices) as [key, choice]}
+                          <li data-letter={key} contenteditable="true" on:input={(e) => handleEdit(index, `choices.${key}`, e.target.textContent)}>
+                              {choice}
+                          </li>
+                          {/each}
+                      </ul>
+                      <button class="add-choice-btn" on:click={() => addEmptyOption(index)}>+</button>
+                  </td>
+                  <td contenteditable="true" on:input={(e) => handleEdit(index, 'answer', e.target.textContent)}>
+                      {question.answer}
+                  </td>
+                  <td contenteditable="true" on:input={(e) => handleEdit(index, 'type', e.target.textContent)}>
+                      {question.type}
+                  </td>
+                  <td contenteditable="true" on:input={(e) => handleEdit(index, 'difficulty', e.target.textContent)}>
+                      {question.difficulty}
+                  </td>
+              </tr>
+              {/each}
+          </tbody>
+      </table>
+    </div>
+      
+    <div class="sticky-buttons">
+      <button on:click={downloadJSON}>Descargar</button>
+      <button on:click={startQuiz}>¡Empecemos!</button>
+    </div>
+  </Route>
+  <Route path="/teacher-page/leaderboards/:code" component={Leaderboard} />
+</Router>
 
 <style>
   .qanda-container {

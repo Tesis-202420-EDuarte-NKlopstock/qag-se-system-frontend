@@ -76,7 +76,7 @@
 
 <!-- Mostrar pantalla de bienvenida solo si `showWelcomeScreen` es true -->
 <Router>
-  <Route path="/" let:location key="{location.pathname}">
+  <Route path="/student-page" let:location key="{location.pathname}">
     <div class="welcome-screen">
         <div class="chat-header">
           <div class="header-content">

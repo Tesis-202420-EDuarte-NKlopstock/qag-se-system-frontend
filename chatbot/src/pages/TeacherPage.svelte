@@ -1,7 +1,9 @@
 <script>
   import { onMount, onDestroy } from "svelte";
+  import { Router, Route, navigate } from "svelte-routing";
   import { uploadFile } from '../services/chatService.js';
   import QandAs from '../components/qandas/QandAs.svelte';
+  import Leaderboard from "../components/leaderboards/Leaderboard.svelte";
 
   let selectedFiles1 = [];
   let selectedFiles2 = [];
@@ -80,81 +82,86 @@
   }
 </script>
 
-<div class="teacher-app-container">
-  <div class="chat-header">
-      <div class="header-content">
-          <img src="/assets/logo_manchita_white.png" alt="Logo" class="logo" />
-          <h3>¡Bienvenido(a) profesor(a)! ¡Arrastra o selecciona un archivo para generar preguntas y respuestas!</h3>
+<Router>
+  <Route path="/teacher-page" let:location key="{location.pathname}" >
+    <div class="teacher-app-container">
+      <div class="chat-header">
+          <div class="header-content">
+              <img src="/assets/logo_manchita_white.png" alt="Logo" class="logo" />
+              <h3>¡Bienvenido(a) profesor(a)! ¡Arrastra o selecciona un archivo para generar preguntas y respuestas!</h3>
+          </div>
       </div>
-  </div>
-  
-  <img src="/assets/background.png" alt="Ola" class="wave-image" />
+      
+      <img src="/assets/background.png" alt="Ola" class="wave-image" />
 
-  <!-- Contenedor de áreas de arrastre -->
-  <div class="drop-area-container">
-      <!-- Primera área de arrastre -->
-      <div 
-          class="drop-area" 
-          on:drop={(event) => handleDrop(event, 1)} 
-          on:dragover={(event) => handleDragOver(event, 1)} 
-          on:dragleave={() => handleDragLeave(1)}
-          class:is-dragging={isDragging1}>
+      <!-- Contenedor de áreas de arrastre -->
+      <div class="drop-area-container">
+          <!-- Primera área de arrastre -->
+          <div 
+              class="drop-area" 
+              on:drop={(event) => handleDrop(event, 1)} 
+              on:dragover={(event) => handleDragOver(event, 1)} 
+              on:dragleave={() => handleDragLeave(1)}
+              class:is-dragging={isDragging1}>
 
-          <p>{isDragging1 ? "Suelta los archivos aquí" : "Carga de Conocimiento: Arrastra y suelta archivos aquí o haz clic para seleccionar"}</p>
-          <input type="file" multiple on:change={(event) => handleFileSelect(event, 1)} hidden id="fileInput1" />
-          <button class="upload-btn" on:click={() => document.getElementById('fileInput1').click()}>Seleccionar archivos</button>
-          {#if selectedFiles1.length > 0}
-              <div class="file-list">
-                  <ul>
-                      {#each selectedFiles1 as file}
-                          <li>{file.name}</li>
-                      {/each}
-                  </ul>
-              </div>
-          {/if}
+              <p>{isDragging1 ? "Suelta los archivos aquí" : "Carga de Conocimiento: Arrastra y suelta archivos aquí o haz clic para seleccionar"}</p>
+              <input type="file" multiple on:change={(event) => handleFileSelect(event, 1)} hidden id="fileInput1" />
+              <button class="upload-btn" on:click={() => document.getElementById('fileInput1').click()}>Seleccionar archivos</button>
+              {#if selectedFiles1.length > 0}
+                  <div class="file-list">
+                      <ul>
+                          {#each selectedFiles1 as file}
+                              <li>{file.name}</li>
+                          {/each}
+                      </ul>
+                  </div>
+              {/if}
+          </div>
+
+          <!-- Segunda área de arrastre -->
+          <div 
+              class="drop-area" 
+              on:drop={(event) => handleDrop(event, 2)} 
+              on:dragover={(event) => handleDragOver(event, 2)} 
+              on:dragleave={() => handleDragLeave(2)}
+              class:is-dragging={isDragging2}>
+
+              <p>{isDragging2 ? "Suelta los archivos aquí" : "Preguntas Existentes: Arrastra y suelta archivos aquí o haz clic para seleccionar"}</p>
+              <input type="file" multiple on:change={(event) => handleFileSelect(event, 2)} hidden id="fileInput2" />
+              <button class="upload-btn" on:click={() => document.getElementById('fileInput2').click()}>Seleccionar archivos</button>
+              {#if selectedFiles2.length > 0}
+                  <div class="file-list">
+                      <ul>
+                          {#each selectedFiles2 as file}
+                              <li>{file.name}</li>
+                          {/each}
+                      </ul>
+                  </div>
+              {/if}
+          </div>
       </div>
 
-      <!-- Segunda área de arrastre -->
-      <div 
-          class="drop-area" 
-          on:drop={(event) => handleDrop(event, 2)} 
-          on:dragover={(event) => handleDragOver(event, 2)} 
-          on:dragleave={() => handleDragLeave(2)}
-          class:is-dragging={isDragging2}>
-
-          <p>{isDragging2 ? "Suelta los archivos aquí" : "Preguntas Existentes: Arrastra y suelta archivos aquí o haz clic para seleccionar"}</p>
-          <input type="file" multiple on:change={(event) => handleFileSelect(event, 2)} hidden id="fileInput2" />
-          <button class="upload-btn" on:click={() => document.getElementById('fileInput2').click()}>Seleccionar archivos</button>
-          {#if selectedFiles2.length > 0}
-              <div class="file-list">
-                  <ul>
-                      {#each selectedFiles2 as file}
-                          <li>{file.name}</li>
-                      {/each}
-                  </ul>
-              </div>
-          {/if}
+      <!-- Botón de cargar -->
+      <div class="button-container {hasScrolled ? 'scrolled': ''}">
+          <button class="upload-btn" on:click={handleUpload} disabled={isLoading}>Cargar</button>
       </div>
-  </div>
 
-  <!-- Botón de cargar -->
-  <div class="button-container {hasScrolled ? 'scrolled': ''}">
-      <button class="upload-btn" on:click={handleUpload} disabled={isLoading}>Cargar</button>
-  </div>
+      {#if isLoading}
+          <div class="loading-spinner">
+              <p>Cargando archivos...</p>
+              <div class="spinner"></div>
+          </div>
+      {/if}
 
-  {#if isLoading}
-      <div class="loading-spinner">
-          <p>Cargando archivos...</p>
-          <div class="spinner"></div>
-      </div>
-  {/if}
-
-  {#if showQandAs}
-      <div class="table-container">
-          <QandAs {qAndAData} on:scroll={handleScroll} />
-      </div>
-  {/if}
-</div>
+      {#if showQandAs}
+          <div class="table-container">
+              <QandAs {qAndAData} on:scroll={handleScroll} />
+          </div>
+      {/if}
+    </div>
+  </Route>
+  <Route path="/teacher-page/leaderboards/:code" component={Leaderboard} key="{location.pathname}" />
+</Router>
   
 <style>
   .teacher-app-container {

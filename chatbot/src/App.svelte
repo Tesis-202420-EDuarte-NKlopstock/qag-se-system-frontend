@@ -5,6 +5,7 @@
   import StudentPage from './pages/StudentPage.svelte';
   import ChatBox from './components/chat/ChatBox.svelte';
   import TowerGame from './components/tower_game/TowerGame.svelte';
+  import Leaderboard from './components/leaderboards/Leaderboard.svelte';
 
   let showWelcomeScreen = true;
 
@@ -57,6 +58,7 @@
   <Route path="/student-page" component={StudentPage} />
   <Route path="/student-page/chatbot/:code" component={ChatBox} />
   <Route path="/student-page/towergame/:code" component={TowerGame} />
+  <Route path="/teacher-page/leaderboards/:code" component={Leaderboard} />
 </Router>
 
 <style>
