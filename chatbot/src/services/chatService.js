@@ -74,9 +74,11 @@ export const uploadFile = async (selectedFiles1, selectedFiles2) => {
         formData.append('files1', file); // 'files' es el nombre del campo en el servidor
       });
 
-      selectedFiles2.forEach((file) => {
-        formData.append('files2', file); // 'files' es el nombre del campo en el servidor
-      });
+      if (selectedFiles2 && selectedFiles2.length > 0) {
+        selectedFiles2.forEach((file) => {
+            formData.append('files2', file); // 'files2' es el nombre del campo en el servidor
+        });
+    }
   
       // Enviar el FormData a la API usando POST
       const response = await axios.post(`${API_URL}/upload_file`, formData, {

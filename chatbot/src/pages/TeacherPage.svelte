@@ -83,7 +83,7 @@
 </script>
 
 <Router>
-  <Route path="/teacher-page" let:location key="{location.pathname}" >
+  <Route path="/" let:location key="{location.pathname}" >
     <div class="teacher-app-container">
       <div class="chat-header">
           <div class="header-content">

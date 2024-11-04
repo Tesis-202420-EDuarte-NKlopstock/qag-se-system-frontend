@@ -14,6 +14,7 @@
   onMount(() => {
       if (qAndAData.length > 0) {
           knowledgeCode = qAndAData[0].code;
+          console.log(knowledgeCode);
           questions = qAndAData.slice(1).map(question => ({
               ...question,
               choices: question.choices || {} // Asegura que `choices` siempre esté definido como un objeto
@@ -90,7 +91,7 @@
 </script>
 
 <Router>
-  <Route path="/teacher-page" let:location key="{location.pathname}">
+  <Route path="/" let:location key="{location.pathname}">
     <div class="qanda-container" on:scroll={handleScroll}>
       <!-- Tabla editable de preguntas y respuestas -->
       <table class="questions-table">
