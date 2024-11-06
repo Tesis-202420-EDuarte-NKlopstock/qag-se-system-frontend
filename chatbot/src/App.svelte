@@ -42,9 +42,9 @@
 <div class="body">
   <h2>MANCHITA GAMIFICADO</h2>
   <div class="container">
-      <div class="image">
+      <!-- <div class="image">
           <img src="/assets/instructions/instr_system.jpeg" alt="instr_system" class="instr-system" />
-      </div>
+      </div> -->
       <div class="buttons">
         <button on:click={goToTeacherPage}>Soy profesor</button>
         <button on:click={goToStudentPage}>Soy estudiante</button>
