@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8000';
-// const API_URL = 'https://34.70.177.151.nip.io'
+// const API_URL = 'http://localhost:8000';
+const API_URL = 'https://34.72.171.141.nip.io'
 
 export const sendMessage = async (message) => {
     try {
