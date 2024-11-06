@@ -22,8 +22,8 @@
     // const exists = true;
     if (exists['database_path'] === true) {
       console.log("Navegando al chatbot con el código:", code);
-      // navigate(`/student-page/towergame/${code.toUpperCase()}`);
-      window.open(`/student-page/towergame/${code.toUpperCase()}`, '_blank');
+      navigate(`/student-page/towergame/${code.toUpperCase()}`);
+      // window.open(`/student-page/towergame/${code.toUpperCase()}`, '_blank');
     } else {
       alert("El código de conocimiento no existe");
       return
@@ -42,8 +42,8 @@
     if (exists['database_path'] === true) {
       console.log("Navegando al chatbot con el código:", code);
       studentName.set(nameInput);
-      // navigate(`/student-page/chatbot/${code.toUpperCase()}`);
-      window.open(`/student-page/chatbot/${code.toUpperCase()}`, '_blank');
+      navigate(`/student-page/chatbot/${code.toUpperCase()}`);
+      // window.open(`/student-page/chatbot/${code.toUpperCase()}`, '_blank');
     } else {
       alert("El código de conocimiento no existe");
       return
@@ -76,7 +76,7 @@
 
 <!-- Mostrar pantalla de bienvenida solo si `showWelcomeScreen` es true -->
 <Router>
-  <Route path="/student-page" let:location key="{location.pathname}">
+  <Route path="/" let:location key="{location.pathname}">
     <div class="welcome-screen">
         <div class="chat-header">
           <div class="header-content">
